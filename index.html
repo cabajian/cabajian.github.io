@@ -61,13 +61,13 @@
         background-position: center;
         height: 14px;
       }
-      /* Hero overlay keeps text legible over the sailboat photo */
+      /* Hero overlay — sea-tinted gradient for a bluer read over the photo */
       .hero-overlay {
         background: linear-gradient(
           180deg,
-          rgba(30, 50, 55, 0.45) 0%,
-          rgba(30, 50, 55, 0.25) 35%,
-          rgba(30, 50, 55, 0.55) 100%
+          rgba(47, 78, 90, 0.55) 0%,
+          rgba(47, 78, 90, 0.30) 35%,
+          rgba(47, 78, 90, 0.65) 100%
         );
       }
       /* Subtle card lift */
@@ -98,7 +98,7 @@
   <body class="font-sans antialiased">
     <!-- ============ NAV ============ -->
     <header
-      class="fixed inset-x-0 top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-sea/10"
+      class="fixed inset-x-0 top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-sea/25"
     >
       <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a href="#top" class="font-display text-xl text-sea-dark tracking-wide">
@@ -136,10 +136,11 @@
     </header>
 
     <!-- ============ HERO ============ -->
-    <section id="top" class="relative min-h-screen flex items-center justify-center">
+    <section id="top" class="relative min-h-screen flex items-center justify-center bg-sea-dark">
       <!-- TODO: replace with your own sailboat photo under assets/hero-sailboat.jpg -->
       <img
-        src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80"
+        src="https://images.pexels.com/photos/3601425/pexels-photo-3601425.jpeg?auto=compress&cs=tinysrgb&w=1920"
+        onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://images.pexels.com/photos/10513984/pexels-photo-10513984.jpeg?auto=compress&cs=tinysrgb&w=1920';}else{this.onerror=null;}"
         alt="Sailboat on the open sea"
         class="absolute inset-0 h-full w-full object-cover"
         loading="eager"
@@ -147,9 +148,9 @@
       <div class="absolute inset-0 hero-overlay"></div>
 
       <div class="relative z-10 text-center text-cream px-6 max-w-3xl">
-        <p class="font-script text-sun text-2xl md:text-3xl mb-2">together with their families</p>
+        <p class="font-script text-sage text-2xl md:text-3xl mb-2">together with their families</p>
         <h1 class="font-display font-bold text-6xl sm:text-7xl md:text-8xl leading-tight">
-          Becky <span class="text-sun italic">&amp;</span> Chris
+          Becky <span class="text-coral italic">&amp;</span> Chris
         </h1>
         <div class="mt-6 flex items-center justify-center gap-4 text-sm md:text-base tracking-[0.2em] uppercase">
           <span class="h-px w-10 bg-cream/70"></span>
@@ -181,7 +182,7 @@
     </section>
 
     <!-- ============ DETAILS ============ -->
-    <section id="details" class="py-24 px-6">
+    <section id="details" class="py-24 px-6 bg-gradient-to-b from-cream to-sea/10">
       <div class="mx-auto max-w-6xl text-center">
         <p class="font-script text-coral text-2xl">the day of</p>
         <h2 class="font-display text-4xl md:text-5xl text-sea-dark mt-1">Details</h2>
@@ -194,7 +195,7 @@
 
       <div class="mx-auto mt-16 grid max-w-6xl gap-8 md:grid-cols-3">
         <!-- Ceremony -->
-        <article class="card bg-white rounded-3xl p-8 shadow-card border border-sea/10">
+        <article class="card bg-white rounded-3xl p-8 shadow-card border border-sea/20">
           <div class="flex justify-center">
             <!-- sailboat icon -->
             <svg class="h-12 w-12 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -224,7 +225,7 @@
         </article>
 
         <!-- Reception -->
-        <article class="card bg-white rounded-3xl p-8 shadow-card border border-sea/10">
+        <article class="card bg-white rounded-3xl p-8 shadow-card border border-sea/20">
           <div class="flex justify-center">
             <!-- wine glass / fork icon -->
             <svg class="h-12 w-12 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -254,7 +255,7 @@
         </article>
 
         <!-- Stay -->
-        <article class="card bg-white rounded-3xl p-8 shadow-card border border-sea/10">
+        <article class="card bg-white rounded-3xl p-8 shadow-card border border-sea/20">
           <div class="flex justify-center">
             <!-- anchor icon -->
             <svg class="h-12 w-12 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -285,11 +286,11 @@
       </div>
     </section>
 
-    <!-- Sage divider -->
-    <div class="bg-sage/30 py-1"></div>
+    <!-- Sea hairline divider -->
+    <div class="bg-sea/25 h-px"></div>
 
     <!-- ============ REGISTRY ============ -->
-    <section id="registry" class="py-24 px-6 bg-sage/20">
+    <section id="registry" class="py-24 px-6 bg-sea/15">
       <div class="mx-auto max-w-3xl text-center">
         <p class="font-script text-coral text-2xl">if you're so inclined</p>
         <h2 class="font-display text-4xl md:text-5xl text-sea-dark mt-1">Registry</h2>
@@ -330,7 +331,7 @@
     </section>
 
     <!-- ============ RSVP ============ -->
-    <section id="rsvp" class="py-24 px-6">
+    <section id="rsvp" class="py-24 px-6 bg-gradient-to-b from-sea/10 via-cream to-sea/10">
       <div class="mx-auto max-w-2xl text-center">
         <p class="font-script text-coral text-2xl">kindly respond</p>
         <h2 class="font-display text-4xl md:text-5xl text-sea-dark mt-1">RSVP</h2>
@@ -344,7 +345,7 @@
            For now the submit handler intercepts the submit and shows a local thank-you. -->
       <form
         id="rsvpForm"
-        class="mx-auto mt-12 max-w-2xl bg-white rounded-3xl p-8 md:p-10 shadow-card border border-sea/10 space-y-6"
+        class="mx-auto mt-12 max-w-2xl bg-cream rounded-3xl p-8 md:p-10 shadow-card border border-sea/20 space-y-6"
       >
         <div>
           <label for="name" class="block text-sm font-semibold text-sea-dark mb-2">
@@ -425,7 +426,7 @@
 
       <div
         id="rsvpThankYou"
-        class="hidden mx-auto mt-12 max-w-2xl text-center bg-sun/30 rounded-3xl p-10 border border-sun"
+        class="hidden mx-auto mt-12 max-w-2xl text-center bg-sea/15 rounded-3xl p-10 border border-sea/30"
       >
         <p class="font-script text-coral text-3xl">thank you!</p>
         <p class="mt-3 text-sea-dark">
@@ -435,7 +436,7 @@
     </section>
 
     <!-- ============ PHOTOS ============ -->
-    <section id="photos" class="py-24 px-6 bg-sea/10">
+    <section id="photos" class="py-24 px-6 bg-sea/20">
       <div class="mx-auto max-w-6xl text-center">
         <p class="font-script text-coral text-2xl">moments</p>
         <h2 class="font-display text-4xl md:text-5xl text-sea-dark mt-1">Photos</h2>
@@ -470,16 +471,30 @@
       </div>
     </section>
 
+    <!-- Wave divider into footer -->
+    <div class="relative bg-sea/20" aria-hidden="true">
+      <svg
+        class="block w-full text-sea-dark"
+        viewBox="0 0 1440 80"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="currentColor"
+          d="M0,40 C240,90 480,0 720,30 C960,60 1200,80 1440,30 L1440,80 L0,80 Z"
+        />
+      </svg>
+    </div>
+
     <!-- ============ FOOTER ============ -->
     <footer class="bg-sea-dark text-cream py-12 px-6">
       <div class="mx-auto max-w-3xl text-center space-y-3">
         <div class="flex justify-center">
-          <svg class="h-8 w-8 text-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <svg class="h-8 w-8 text-sage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="12" cy="5" r="2" />
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 7v13M8 10h8M5 16a7 7 0 0 0 14 0" />
           </svg>
         </div>
-        <p class="font-script text-2xl text-sun">with love</p>
+        <p class="font-script text-2xl text-sage">with love</p>
         <p class="font-display text-xl">Becky &amp; Chris</p>
         <p class="text-sm text-cream/70">Portland, Maine · June 5, 2027</p>
       </div>
