@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Becky &amp; Chris · June 5, 2027 · Portland, Maine</title>
+    <title>Becky &amp; Chris · June 12, 2027 · Portland, Maine</title>
     <meta
       name="description"
-      content="Becky and Chris are getting married on June 5, 2027 in Portland, Maine. Join us for a sailboat ceremony and a dinner at ViA VECCHiA."
+      content="Becky and Chris are getting married on June 12, 2027 in Portland, Maine. Join us for a ceremony aboard the Schooner Timberwind and a reception at Rí Rá Irish Pub."
     />
 
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
@@ -18,19 +18,25 @@
       rel="stylesheet"
     />
 
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              sea: "#6f8e96",
-              "sea-dark": "#4f6a71",
-              sage: "#b9d19f",
-              cream: "#ffffed",
-              sun: "#ffd665",
-              coral: "#de605a",
-              "coral-dark": "#bf4840",
+              ivy: "#2c5545",
+              "ivy-dark": "#1a3830",
+              sage: "#8aab75",
+              cream: "#faf3e6",
+              gold: "#c4963a",
+              "gold-dark": "#a47a28",
             },
             fontFamily: {
               display: ['"Playfair Display"', "serif"],
@@ -38,7 +44,7 @@
               script: ["Caveat", "cursive"],
             },
             boxShadow: {
-              card: "0 10px 30px -12px rgba(79, 106, 113, 0.25)",
+              card: "0 10px 30px -12px rgba(26, 56, 48, 0.25)",
             },
           },
         },
@@ -50,24 +56,24 @@
         scroll-behavior: smooth;
       }
       body {
-        background-color: #ffffed;
-        color: #2f3a3d;
+        background-color: #faf3e6;
+        color: #2a2e2c;
       }
       /* Dotted rope-style divider */
       .rope {
-        background-image: radial-gradient(circle, #6f8e96 1.2px, transparent 1.4px);
+        background-image: radial-gradient(circle, #2c5545 1.2px, transparent 1.4px);
         background-size: 14px 14px;
         background-repeat: repeat-x;
         background-position: center;
         height: 14px;
       }
-      /* Hero overlay — sea-tinted gradient for a bluer read over the photo */
+      /* Hero overlay — warm dark-green tinted gradient */
       .hero-overlay {
         background: linear-gradient(
           180deg,
-          rgba(47, 78, 90, 0.55) 0%,
-          rgba(47, 78, 90, 0.30) 35%,
-          rgba(47, 78, 90, 0.65) 100%
+          rgba(26, 56, 48, 0.60) 0%,
+          rgba(26, 56, 48, 0.30) 35%,
+          rgba(26, 56, 48, 0.70) 100%
         );
       }
       /* Subtle card lift */
@@ -92,27 +98,37 @@
       .nav-closed {
         max-height: 0;
       }
+      /* Leaflet popup styling */
+      .leaflet-popup-content-wrapper {
+        border-radius: 12px;
+        font-family: Inter, system-ui, sans-serif;
+      }
+      .leaflet-popup-content {
+        margin: 12px 16px;
+        line-height: 1.5;
+      }
     </style>
   </head>
 
   <body class="font-sans antialiased">
     <!-- ============ NAV ============ -->
     <header
-      class="fixed inset-x-0 top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-sea/25"
+      class="fixed inset-x-0 top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-ivy/25"
     >
       <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <a href="#top" class="font-display text-xl text-sea-dark tracking-wide">
-          B <span class="text-coral">&amp;</span> C
+        <a href="#top" class="font-display text-xl text-ivy-dark tracking-wide">
+          B <span class="text-gold">&amp;</span> C
         </a>
-        <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-sea-dark">
-          <li><a class="hover:text-coral transition" href="#details">Details</a></li>
-          <li><a class="hover:text-coral transition" href="#registry">Registry</a></li>
-          <li><a class="hover:text-coral transition" href="#rsvp">RSVP</a></li>
-          <li><a class="hover:text-coral transition" href="#photos">Photos</a></li>
+        <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-ivy-dark">
+          <li><a class="hover:text-gold transition" href="#details">Details</a></li>
+          <li><a class="hover:text-gold transition" href="#map-section">Map</a></li>
+          <li><a class="hover:text-gold transition" href="#registry">Registry</a></li>
+          <li><a class="hover:text-gold transition" href="#rsvp">RSVP</a></li>
+          <li><a class="hover:text-gold transition" href="#photos">Photos</a></li>
         </ul>
         <button
           id="navToggle"
-          class="md:hidden text-sea-dark p-2 -mr-2"
+          class="md:hidden text-ivy-dark p-2 -mr-2"
           aria-label="Toggle menu"
           aria-expanded="false"
         >
@@ -124,10 +140,11 @@
       </nav>
       <div
         id="mobileNav"
-        class="md:hidden overflow-hidden nav-closed transition-[max-height] duration-300 ease-in-out bg-cream border-t border-sea/10"
+        class="md:hidden overflow-hidden nav-closed transition-[max-height] duration-300 ease-in-out bg-cream border-t border-ivy/10"
       >
-        <ul class="flex flex-col px-6 py-4 gap-4 text-sea-dark font-medium">
+        <ul class="flex flex-col px-6 py-4 gap-4 text-ivy-dark font-medium">
           <li><a class="block py-1" href="#details">Details</a></li>
+          <li><a class="block py-1" href="#map-section">Map</a></li>
           <li><a class="block py-1" href="#registry">Registry</a></li>
           <li><a class="block py-1" href="#rsvp">RSVP</a></li>
           <li><a class="block py-1" href="#photos">Photos</a></li>
@@ -136,11 +153,10 @@
     </header>
 
     <!-- ============ HERO ============ -->
-    <section id="top" class="relative min-h-screen flex items-center justify-center bg-sea-dark">
-      <!-- TODO: replace with your own sailboat photo under assets/hero-sailboat.jpg -->
+    <section id="top" class="relative min-h-screen flex items-center justify-center bg-ivy-dark">
       <img
-        src="images/hero_sailboat.png"
-        alt="Sailboat off the coast of Maine"
+        src="images/timberwind.png"
+        alt="Schooner Timberwind under sail off the coast of Maine"
         class="absolute inset-0 h-full w-full object-cover"
         loading="eager"
       />
@@ -148,18 +164,18 @@
 
       <div class="relative z-10 text-center text-cream px-6 max-w-3xl">
         <h1 class="font-display font-bold text-6xl sm:text-7xl md:text-8xl leading-tight">
-          Becky <span class="text-coral italic">&amp;</span> Chris
+          Becky <span class="text-gold italic">&amp;</span> Chris
         </h1>
         <div class="mt-6 flex items-center justify-center gap-4 text-sm md:text-base tracking-[0.2em] uppercase">
           <span class="h-px w-10 bg-cream/70"></span>
-          <span>June 5, 2027</span>
+          <span>June 12, 2027</span>
           <span class="h-px w-10 bg-cream/70"></span>
         </div>
         <p class="mt-2 text-lg md:text-xl font-light">Portland, Maine</p>
 
         <a
           href="#rsvp"
-          class="inline-block mt-10 rounded-full bg-coral hover:bg-coral-dark text-cream font-semibold tracking-wide px-10 py-4 shadow-card transition"
+          class="inline-block mt-10 rounded-full bg-gold hover:bg-gold-dark text-cream font-semibold tracking-wide px-10 py-4 shadow-card transition"
         >
           RSVP
         </a>
@@ -180,104 +196,107 @@
     </section>
 
     <!-- ============ DETAILS ============ -->
-    <section id="details" class="py-24 px-6 bg-gradient-to-b from-cream to-sea/10">
+    <section id="details" class="py-24 px-6 bg-gradient-to-b from-cream to-ivy/10">
       <div class="mx-auto max-w-6xl text-center">
-        <p class="font-script text-coral text-2xl">the day of</p>
-        <h2 class="font-display text-4xl md:text-5xl text-sea-dark mt-1">Details</h2>
+        <p class="font-script text-gold text-2xl">the day of</p>
+        <h2 class="font-display text-4xl md:text-5xl text-ivy-dark mt-1">Details</h2>
         <div class="rope mx-auto mt-6 w-32"></div>
-        <p class="mt-6 max-w-xl mx-auto text-sea-dark/80">
+        <p class="mt-6 max-w-xl mx-auto text-ivy-dark/80">
           A small, salty celebration on the working waterfront. Here's everything you need to
           know to join us on the coast of Maine.
         </p>
       </div>
 
       <div class="mx-auto mt-16 grid max-w-6xl gap-8 md:grid-cols-3">
-        <!-- Ceremony -->
-        <article class="card bg-white rounded-3xl p-8 shadow-card border border-sea/20">
+        <!-- Ceremony / Sail -->
+        <article class="card bg-white rounded-3xl p-8 shadow-card border border-ivy/20">
           <div class="flex justify-center">
-            <!-- sailboat icon -->
-            <svg class="h-12 w-12 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <svg class="h-12 w-12 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v13M12 3l7 11H5l7-11z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 19c2 1 3 1 5 0s3-1 5 0 3 1 5 0 3-1 4 0" />
             </svg>
           </div>
-          <h3 class="mt-4 text-center font-display text-2xl text-sea-dark">Ceremony</h3>
-          <p class="mt-2 text-center text-sm uppercase tracking-wider text-coral font-semibold">
-            Time TBD
+          <h3 class="mt-4 text-center font-display text-2xl text-ivy-dark">Ceremony</h3>
+          <p class="mt-2 text-center text-sm uppercase tracking-wider text-gold font-semibold">
+            3:30 &ndash; 5:30 PM
           </p>
-          <div class="mt-5 text-center text-sea-dark/80 space-y-1">
-            <p class="font-semibold">Portland Schooner Co.</p>
-            <p>Maine State Pier</p>
+          <div class="mt-5 text-center text-ivy-dark/80 space-y-1">
+            <p class="font-semibold">Schooner Timberwind</p>
+            <p>Portland Schooner Co.</p>
+            <p>Ocean Gateway Pier</p>
             <p>Portland, ME</p>
           </div>
           <div class="mt-6 text-center">
             <a
-              href="https://www.portlandschooner.com/weddings"
+              href="https://www.portlandschooner.com"
               target="_blank"
               rel="noopener"
-              class="inline-block text-sm font-semibold text-sea hover:text-coral underline underline-offset-4"
+              class="inline-block text-sm font-semibold text-ivy hover:text-gold underline underline-offset-4"
             >
-              Learn more →
+              Learn more &rarr;
             </a>
           </div>
         </article>
 
-        <!-- Reception -->
-        <article class="card bg-white rounded-3xl p-8 shadow-card border border-sea/20">
+        <!-- Cocktail Reception -->
+        <article class="card bg-white rounded-3xl p-8 shadow-card border border-ivy/20">
           <div class="flex justify-center">
-            <!-- wine glass / fork icon -->
-            <svg class="h-12 w-12 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <svg class="h-12 w-12 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 3h12l-1 7a5 5 0 0 1-10 0L6 3z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v6M8 21h8" />
             </svg>
           </div>
-          <h3 class="mt-4 text-center font-display text-2xl text-sea-dark">Reception</h3>
-          <p class="mt-2 text-center text-sm uppercase tracking-wider text-coral font-semibold">
-            Time TBD
+          <h3 class="mt-4 text-center font-display text-2xl text-ivy-dark">Reception</h3>
+          <p class="mt-2 text-center text-sm uppercase tracking-wider text-gold font-semibold">
+            5:30 &ndash; 6:30 PM
           </p>
-          <div class="mt-5 text-center text-sea-dark/80 space-y-1">
-            <p class="font-semibold">ViA VECCHiA</p>
-            <p>10 Dana Street</p>
+          <div class="mt-5 text-center text-ivy-dark/80 space-y-1">
+            <p class="font-semibold">R&iacute; R&aacute; Irish Pub</p>
+            <p>The Harbor Room</p>
+            <p>72 Commercial Street</p>
             <p>Portland, ME</p>
           </div>
           <div class="mt-6 text-center">
             <a
-              href="https://vvoldport.com"
+              href="https://rira.com/portland/private-events/"
               target="_blank"
               rel="noopener"
-              class="inline-block text-sm font-semibold text-sea hover:text-coral underline underline-offset-4"
+              class="inline-block text-sm font-semibold text-ivy hover:text-gold underline underline-offset-4"
             >
-              Learn more →
+              Learn more &rarr;
             </a>
           </div>
         </article>
 
-        <!-- Stay -->
-        <article class="card bg-white rounded-3xl p-8 shadow-card border border-sea/20">
+        <!-- Dinner & Dessert -->
+        <article class="card bg-white rounded-3xl p-8 shadow-card border border-ivy/20">
           <div class="flex justify-center">
-            <!-- anchor icon -->
-            <svg class="h-12 w-12 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="5" r="2" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 7v13M8 10h8M5 16a7 7 0 0 0 14 0" />
+            <svg class="h-12 w-12 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 3v6M8 3v6M10 3v6" />
+              <path d="M6 9Q8 12 10 9" />
+              <path d="M8 11v10" />
+              <path d="M16 3v18" />
+              <path d="M16 3C19 4 19 9 16 11" />
             </svg>
           </div>
-          <h3 class="mt-4 text-center font-display text-2xl text-sea-dark">Stay</h3>
-          <p class="mt-2 text-center text-sm uppercase tracking-wider text-coral font-semibold">
-            Group code: TBD
+          <h3 class="mt-4 text-center font-display text-2xl text-ivy-dark">Dinner &amp; Dessert</h3>
+          <p class="mt-2 text-center text-sm uppercase tracking-wider text-gold font-semibold">
+            6:30 &ndash; 9:00 PM
           </p>
-          <div class="mt-5 text-center text-sea-dark/80 space-y-1">
-            <p class="font-semibold">Portland Harbor Hotel</p>
-            <p>468 Fore Street</p>
+          <div class="mt-5 text-center text-ivy-dark/80 space-y-1">
+            <p class="font-semibold">R&iacute; R&aacute; Irish Pub</p>
+            <p>The Harbor Room</p>
+            <p>72 Commercial Street</p>
             <p>Portland, ME</p>
           </div>
           <div class="mt-6 text-center">
             <a
-              href="https://www.portlandharborhotel.com"
+              href="https://rira.com/portland/private-events/"
               target="_blank"
               rel="noopener"
-              class="inline-block text-sm font-semibold text-sea hover:text-coral underline underline-offset-4"
+              class="inline-block text-sm font-semibold text-ivy hover:text-gold underline underline-offset-4"
             >
-              Book a room →
+              Learn more &rarr;
             </a>
           </div>
         </article>
@@ -285,15 +304,64 @@
     </section>
 
     <!-- Sea hairline divider -->
-    <div class="bg-sea/25 h-px"></div>
+    <div class="bg-ivy/25 h-px"></div>
+
+    <!-- ============ MAP ============ -->
+    <section id="map-section" class="py-24 px-6 bg-ivy/10">
+      <div class="mx-auto max-w-6xl text-center">
+        <p class="font-script text-gold text-2xl">find your way</p>
+        <h2 class="font-display text-4xl md:text-5xl text-ivy-dark mt-1">Map</h2>
+        <div class="rope mx-auto mt-6 w-32"></div>
+        <p class="mt-6 max-w-xl mx-auto text-ivy-dark/80">
+          The ceremony and reception are just steps apart on Portland's historic waterfront.
+        </p>
+      </div>
+
+      <div
+        class="mx-auto mt-12 max-w-4xl rounded-3xl overflow-hidden shadow-card border border-ivy/20"
+      >
+        <div id="map" style="height: 420px; width: 100%;"></div>
+      </div>
+
+      <div class="mx-auto mt-8 max-w-4xl grid gap-4 sm:grid-cols-2 text-sm text-ivy-dark/80">
+        <div class="flex items-start gap-3 bg-white/60 rounded-2xl p-4 border border-ivy/10">
+          <span class="mt-0.5 flex-shrink-0 w-3 h-3 rounded-full border-2 border-ivy-dark" style="background-color:#c4963a"></span>
+          <div>
+            <p class="font-semibold text-ivy-dark">Schooner Timberwind</p>
+            <p>Ocean Gateway Pier &middot; Ceremony <i>(potential #1)</i></p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 bg-white/60 rounded-2xl p-4 border border-ivy/10">
+          <span class="mt-0.5 flex-shrink-0 w-3 h-3 rounded-full border-2 border-ivy-dark" style="background-color:#9f2d00"></span>
+          <div>
+            <p class="font-semibold text-ivy-dark">Schooner Timberwind</p>
+            <p>Maine State Pier &middot; Ceremony <i>(potential #2)</i></p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 bg-white/60 rounded-2xl p-4 border border-ivy/10">
+          <span class="mt-0.5 flex-shrink-0 w-3 h-3 rounded-full bg-ivy border-2 border-ivy-dark"></span>
+          <div>
+            <p class="font-semibold text-ivy-dark">R&iacute; R&aacute; Irish Pub</p>
+            <p>72 Commercial St &middot; Reception</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 bg-white/60 rounded-2xl p-4 border border-ivy/10">
+          <span class="mt-0.5 flex-shrink-0 w-3 h-3 rounded-full border-2 border-gray-600" style="background-color:#6b7280"></span>
+          <div>
+            <p class="font-semibold text-ivy-dark">Nearby Hotels</p>
+            <p>Click pins for names &amp; addresses</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ============ REGISTRY ============ -->
-    <section id="registry" class="py-24 px-6 bg-sea/15">
+    <section id="registry" class="py-24 px-6 bg-ivy/15">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="font-script text-coral text-2xl">if you're so inclined</p>
-        <h2 class="font-display text-4xl md:text-5xl text-sea-dark mt-1">Registry</h2>
+        <p class="font-script text-gold text-2xl">if you're so inclined</p>
+        <h2 class="font-display text-4xl md:text-5xl text-ivy-dark mt-1">Registry</h2>
         <div class="rope mx-auto mt-6 w-32"></div>
-        <p class="mt-6 text-sea-dark/80">
+        <p class="mt-6 text-ivy-dark/80">
           Your presence on our big day is the greatest gift of all. If you'd like to help us
           feather the nest, we've set up a few registries below.
         </p>
@@ -304,7 +372,7 @@
             href="#"
             target="_blank"
             rel="noopener"
-            class="inline-block rounded-full bg-sea text-cream font-semibold px-8 py-3 shadow-card hover:bg-sea-dark transition"
+            class="inline-block rounded-full bg-ivy text-cream font-semibold px-8 py-3 shadow-card hover:bg-ivy-dark transition"
           >
             Zola
           </a>
@@ -312,7 +380,7 @@
             href="#"
             target="_blank"
             rel="noopener"
-            class="inline-block rounded-full bg-sea text-cream font-semibold px-8 py-3 shadow-card hover:bg-sea-dark transition"
+            class="inline-block rounded-full bg-ivy text-cream font-semibold px-8 py-3 shadow-card hover:bg-ivy-dark transition"
           >
             Amazon
           </a>
@@ -320,7 +388,7 @@
             href="#"
             target="_blank"
             rel="noopener"
-            class="inline-block rounded-full bg-sea text-cream font-semibold px-8 py-3 shadow-card hover:bg-sea-dark transition"
+            class="inline-block rounded-full bg-ivy text-cream font-semibold px-8 py-3 shadow-card hover:bg-ivy-dark transition"
           >
             Crate &amp; Barrel
           </a>
@@ -329,24 +397,23 @@
     </section>
 
     <!-- ============ RSVP ============ -->
-    <section id="rsvp" class="py-24 px-6 bg-gradient-to-b from-sea/10 via-cream to-sea/10">
+    <section id="rsvp" class="py-24 px-6 bg-gradient-to-b from-ivy/10 via-cream to-ivy/10">
       <div class="mx-auto max-w-2xl text-center">
-        <p class="font-script text-coral text-2xl">kindly respond</p>
-        <h2 class="font-display text-4xl md:text-5xl text-sea-dark mt-1">RSVP</h2>
+        <p class="font-script text-gold text-2xl">kindly respond</p>
+        <h2 class="font-display text-4xl md:text-5xl text-ivy-dark mt-1">RSVP</h2>
         <div class="rope mx-auto mt-6 w-32"></div>
-        <p class="mt-6 text-sea-dark/80">
+        <p class="mt-6 text-ivy-dark/80">
           Please let us know by <span class="font-semibold">May 1, 2027</span>.
         </p>
       </div>
 
-      <!-- TODO: wire this form up to Formspree / Google Form / custom backend.
-           For now the submit handler intercepts the submit and shows a local thank-you. -->
+      <!-- TODO: wire this form up to Formspree / Google Form / custom backend. -->
       <form
         id="rsvpForm"
-        class="mx-auto mt-12 max-w-2xl bg-cream rounded-3xl p-8 md:p-10 shadow-card border border-sea/20 space-y-6"
+        class="mx-auto mt-12 max-w-2xl bg-cream rounded-3xl p-8 md:p-10 shadow-card border border-ivy/20 space-y-6"
       >
         <div>
-          <label for="name" class="block text-sm font-semibold text-sea-dark mb-2">
+          <label for="name" class="block text-sm font-semibold text-ivy-dark mb-2">
             Full name
           </label>
           <input
@@ -354,28 +421,28 @@
             name="name"
             type="text"
             required
-            class="w-full rounded-xl border border-sea/20 bg-cream/50 px-4 py-3 text-sea-dark focus:outline-none focus:ring-2 focus:ring-coral/60 focus:border-coral"
+            class="w-full rounded-xl border border-ivy/20 bg-cream/50 px-4 py-3 text-ivy-dark focus:outline-none focus:ring-2 focus:ring-gold/60 focus:border-gold"
           />
         </div>
 
         <fieldset>
-          <legend class="block text-sm font-semibold text-sea-dark mb-2">
+          <legend class="block text-sm font-semibold text-ivy-dark mb-2">
             Will you be attending?
           </legend>
           <div class="flex gap-6">
             <label class="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="attending" value="yes" required class="accent-coral" />
-              <span class="text-sea-dark">Joyfully accepts</span>
+              <input type="radio" name="attending" value="yes" required class="accent-gold" />
+              <span class="text-ivy-dark">Joyfully accepts</span>
             </label>
             <label class="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="attending" value="no" class="accent-coral" />
-              <span class="text-sea-dark">Regretfully declines</span>
+              <input type="radio" name="attending" value="no" class="accent-gold" />
+              <span class="text-ivy-dark">Regretfully declines</span>
             </label>
           </div>
         </fieldset>
 
         <div>
-          <label for="guests" class="block text-sm font-semibold text-sea-dark mb-2">
+          <label for="guests" class="block text-sm font-semibold text-ivy-dark mb-2">
             Number of guests (including yourself)
           </label>
           <input
@@ -385,12 +452,12 @@
             min="0"
             max="4"
             value="1"
-            class="w-full rounded-xl border border-sea/20 bg-cream/50 px-4 py-3 text-sea-dark focus:outline-none focus:ring-2 focus:ring-coral/60 focus:border-coral"
+            class="w-full rounded-xl border border-ivy/20 bg-cream/50 px-4 py-3 text-ivy-dark focus:outline-none focus:ring-2 focus:ring-gold/60 focus:border-gold"
           />
         </div>
 
         <div>
-          <label for="dietary" class="block text-sm font-semibold text-sea-dark mb-2">
+          <label for="dietary" class="block text-sm font-semibold text-ivy-dark mb-2">
             Dietary restrictions
           </label>
           <input
@@ -398,25 +465,25 @@
             name="dietary"
             type="text"
             placeholder="Vegetarian, gluten-free, allergies, etc."
-            class="w-full rounded-xl border border-sea/20 bg-cream/50 px-4 py-3 text-sea-dark focus:outline-none focus:ring-2 focus:ring-coral/60 focus:border-coral"
+            class="w-full rounded-xl border border-ivy/20 bg-cream/50 px-4 py-3 text-ivy-dark focus:outline-none focus:ring-2 focus:ring-gold/60 focus:border-gold"
           />
         </div>
 
         <div>
-          <label for="message" class="block text-sm font-semibold text-sea-dark mb-2">
+          <label for="message" class="block text-sm font-semibold text-ivy-dark mb-2">
             A note for the couple
           </label>
           <textarea
             id="message"
             name="message"
             rows="3"
-            class="w-full rounded-xl border border-sea/20 bg-cream/50 px-4 py-3 text-sea-dark focus:outline-none focus:ring-2 focus:ring-coral/60 focus:border-coral"
+            class="w-full rounded-xl border border-ivy/20 bg-cream/50 px-4 py-3 text-ivy-dark focus:outline-none focus:ring-2 focus:ring-gold/60 focus:border-gold"
           ></textarea>
         </div>
 
         <button
           type="submit"
-          class="w-full rounded-full bg-coral hover:bg-coral-dark text-cream font-semibold tracking-wide px-8 py-4 shadow-card transition"
+          class="w-full rounded-full bg-gold hover:bg-gold-dark text-cream font-semibold tracking-wide px-8 py-4 shadow-card transition"
         >
           Send it
         </button>
@@ -424,22 +491,22 @@
 
       <div
         id="rsvpThankYou"
-        class="hidden mx-auto mt-12 max-w-2xl text-center bg-sea/15 rounded-3xl p-10 border border-sea/30"
+        class="hidden mx-auto mt-12 max-w-2xl text-center bg-ivy/15 rounded-3xl p-10 border border-ivy/30"
       >
-        <p class="font-script text-coral text-3xl">thank you!</p>
-        <p class="mt-3 text-sea-dark">
+        <p class="font-script text-gold text-3xl">thank you!</p>
+        <p class="mt-3 text-ivy-dark">
           We can't wait to celebrate with you on the coast of Maine.
         </p>
       </div>
     </section>
 
     <!-- ============ PHOTOS ============ -->
-    <section id="photos" class="py-24 px-6 bg-sea/20">
+    <section id="photos" class="py-24 px-6 bg-ivy/20">
       <div class="mx-auto max-w-6xl text-center">
-        <p class="font-script text-coral text-2xl">moments</p>
-        <h2 class="font-display text-4xl md:text-5xl text-sea-dark mt-1">Photos</h2>
+        <p class="font-script text-gold text-2xl">moments</p>
+        <h2 class="font-display text-4xl md:text-5xl text-ivy-dark mt-1">Photos</h2>
         <div class="rope mx-auto mt-6 w-32"></div>
-        <p class="mt-6 max-w-xl mx-auto text-sea-dark/80">
+        <p class="mt-6 max-w-xl mx-auto text-ivy-dark/80">
           A few of our favorite snapshots. More to come after the big day!
         </p>
       </div>
@@ -470,9 +537,9 @@
     </section>
 
     <!-- Wave divider into footer -->
-    <div class="relative bg-sea/20" aria-hidden="true">
+    <div class="relative bg-ivy/20" aria-hidden="true">
       <svg
-        class="block w-full text-sea-dark"
+        class="block w-full text-ivy-dark"
         viewBox="0 0 1440 80"
         preserveAspectRatio="none"
       >
@@ -484,7 +551,7 @@
     </div>
 
     <!-- ============ FOOTER ============ -->
-    <footer class="bg-sea-dark text-cream py-12 px-6">
+    <footer class="bg-ivy-dark text-cream py-12 px-6">
       <div class="mx-auto max-w-3xl text-center space-y-3">
         <div class="flex justify-center">
           <svg class="h-8 w-8 text-sage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -494,10 +561,15 @@
         </div>
         <p class="font-script text-2xl text-sage">with love</p>
         <p class="font-display text-xl">Becky &amp; Chris</p>
-        <p class="text-sm text-cream/70">Portland, Maine · June 5, 2027</p>
+        <p class="text-sm text-cream/70">Portland, Maine &middot; June 12, 2027</p>
       </div>
     </footer>
 
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
     <script>
       // Mobile nav toggle
       const navToggle = document.getElementById("navToggle");
@@ -507,7 +579,6 @@
         mobileNav.classList.toggle("nav-closed", !isOpen);
         navToggle.setAttribute("aria-expanded", String(isOpen));
       });
-      // Close mobile nav when any link inside it is tapped
       mobileNav.querySelectorAll("a").forEach((a) =>
         a.addEventListener("click", () => {
           mobileNav.classList.remove("nav-open");
@@ -516,7 +587,7 @@
         })
       );
 
-      // RSVP form stub — TODO: replace with real submission (Formspree/Google Form/etc.)
+      // RSVP form stub
       const form = document.getElementById("rsvpForm");
       const thanks = document.getElementById("rsvpThankYou");
       form.addEventListener("submit", (e) => {
@@ -524,6 +595,116 @@
         form.classList.add("hidden");
         thanks.classList.remove("hidden");
         thanks.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+
+      // Interactive map
+      const map = L.map("map").setView([43.658251, -70.249398], 16);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+      }).addTo(map);
+
+      var sailboatIcon = L.divIcon({
+        html: '<svg width="40" height="50" viewBox="0 0 40 50">'
+          + '<path d="M20 2C11.2 2 4 9.2 4 18c0 12 16 30 16 30s16-18 16-30C36 9.2 28.8 2 20 2z" fill="#c4963a" stroke="#1a3830" stroke-width="1.5"/>'
+          + '<g transform="translate(11,7)" fill="none" stroke="#faf3e6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+          + '<path d="M9 2v13M9 2l6 9H3l6-9z"/>'
+          + '<path d="M2 17c1.5.8 2.5.8 4 0s2.5-.8 4 0 2.5.8 4 0"/>'
+          + '</g></svg>',
+        className: "",
+        iconSize: [40, 50],
+        iconAnchor: [20, 50],
+        popupAnchor: [0, -52],
+      });
+
+      var sailboatIcon2 = L.divIcon({
+        html: '<svg width="40" height="50" viewBox="0 0 40 50">'
+          + '<path d="M20 2C11.2 2 4 9.2 4 18c0 12 16 30 16 30s16-18 16-30C36 9.2 28.8 2 20 2z" fill="#9f2d00" stroke="#1a3830" stroke-width="1.5"/>'
+          + '<g transform="translate(11,7)" fill="none" stroke="#faf3e6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+          + '<path d="M9 2v13M9 2l6 9H3l6-9z"/>'
+          + '<path d="M2 17c1.5.8 2.5.8 4 0s2.5-.8 4 0 2.5.8 4 0"/>'
+          + '</g></svg>',
+        className: "",
+        iconSize: [40, 50],
+        iconAnchor: [20, 50],
+        popupAnchor: [0, -52],
+      });
+
+      var plateIcon = L.divIcon({
+        html: '<svg width="40" height="50" viewBox="0 0 40 50">'
+          + '<path d="M20 2C11.2 2 4 9.2 4 18c0 12 16 30 16 30s16-18 16-30C36 9.2 28.8 2 20 2z" fill="#2c5545" stroke="#1a3830" stroke-width="1.5"/>'
+          + '<g transform="translate(20,16)" fill="none" stroke="#faf3e6" stroke-linecap="round" stroke-linejoin="round">'
+          + '<line x1="-3.5" y1="-9" x2="-3.5" y2="8" stroke-width="1.6"/>'
+          + '<line x1="-6" y1="-9" x2="-6" y2="-4" stroke-width="1.4"/>'
+          + '<line x1="-1" y1="-9" x2="-1" y2="-4" stroke-width="1.4"/>'
+          + '<path d="M-6-4Q-3.5-2.5-1-4" stroke-width="1.4" fill="none"/>'
+          + '<path d="M4-9C7.5-8 8-4 4-3L4 8" stroke-width="1.6"/>'
+          + '</g></svg>',
+        className: "",
+        iconSize: [40, 50],
+        iconAnchor: [20, 50],
+        popupAnchor: [0, -52],
+      });
+
+      L.marker([43.656107, -70.247156], { icon: sailboatIcon2 })
+        .addTo(map)
+        .bindPopup(
+          '<strong style="color:#1a3830">Schooner Timberwind</strong><br>'
+          + '<span style="color:#9f2d00;font-weight:600">Ceremony</span><br>'
+          + 'Main State Pier, Commercial St'
+        );
+
+      L.marker([43.659408, -70.246461], { icon: sailboatIcon })
+        .addTo(map)
+        .bindPopup(
+          '<strong style="color:#1a3830">Schooner Timberwind</strong><br>'
+          + '<span style="color:#c4963a;font-weight:600">Ceremony</span><br>'
+          + 'Ocean Gateway Pier, Thames St'
+        );
+
+      L.marker([43.657330, -70.250039], { icon: plateIcon })
+        .addTo(map)
+        .bindPopup(
+          '<strong style="color:#1a3830">R&iacute; R&aacute; Irish Pub</strong><br>'
+          + '<span style="color:#2c5545;font-weight:600">Reception &mdash; Harbor Room</span><br>'
+          + '72 Commercial Street'
+        );
+
+      // Hotel pins
+      var hotelIcon = L.divIcon({
+        html: '<svg width="22" height="30" viewBox="0 0 22 30">'
+          + '<path d="M11 1C5.5 1 1 5.5 1 11c0 7.5 10 18 10 18s10-10.5 10-18C21 5.5 16.5 1 11 1z" fill="#6b7280" stroke="#374151" stroke-width="1.2"/>'
+          + '<circle cx="11" cy="11" r="3.5" fill="#faf3e6"/>'
+          + '</svg>',
+        className: "",
+        iconSize: [22, 30],
+        iconAnchor: [11, 30],
+        popupAnchor: [0, -32],
+      });
+
+      var hotels = [
+        { coords: [43.658023, -70.250115], name: "Hilton Garden Inn", addr: "65 Commercial St" },
+        { coords: [43.655245, -70.254922], name: "Portland Harbor Hotel", addr: "468 Fore St" },
+        { coords: [43.655998, -70.254804], name: "Hyatt Place Portland Old Port", addr: "433 Fore St" },
+        { coords: [43.657011, -70.252680], name: "Portland Regency Hotel & Spa", addr: "20 Milk St" },
+        { coords: [43.658749, -70.256204], name: "The Press Hotel", addr: "119 Exchange St" },
+        { coords: [43.654717, -70.263765], name: "The Westin Portland Harborview", addr: "157 High St" },
+        { coords: [43.653604, -70.260411], name: "Holiday Inn Portland-By The Bay", addr: "88 Spring St" },
+        { coords: [43.660171, -70.247770], name: "AC Hotel Portland Downtown/Waterfront", addr: "158 Fore St" },
+        { coords: [43.659325, -70.250785], name: "Hampton Inn Downtown Waterfront", addr: "209 Fore St" },
+        { coords: [43.661177, -70.248376], name: "Residence Inn Downtown/Waterfront", addr: "145 Fore St" },
+        { coords: [43.661323, -70.248793], name: "Cambria Hotel Portland Old Port", addr: "25 Hancock St" },
+        { coords: [43.652865, -70.256589], name: "Courtyard by Marriott Downtown", addr: "321 Commercial St" },
+        { coords: [43.653956, -70.255997], name: "Canopy by Hilton Portland Waterfront", addr: "9 Center St" },
+      ];
+
+      hotels.forEach(function (h) {
+        L.marker(h.coords, { icon: hotelIcon })
+          .addTo(map)
+          .bindPopup(
+            '<strong style="color:#1a3830">' + h.name + '</strong><br>'
+            + '<span style="color:#6b7280">' + h.addr + '</span>'
+          );
       });
     </script>
   </body>
