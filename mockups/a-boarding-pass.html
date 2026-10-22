@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Mockup A · Boarding Pass · Becky &amp; Chris</title>
+    <meta name="theme-color" content="#f6f8f8" />
+    <link rel="icon" type="image/png" href="../assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,500;0,600;1,500&family=Montserrat:ital,wght@0,500;0,600;1,500&family=Mrs+Saint+Delafield&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Mockup A — "Boarding Pass"
+         Picks up the save-the-date card: the ticket, its slate stub, the
+         perforation, Bodoni caps with a script accent. Mobile first; the
+         ticket turns sideways like the printed card from 760px up. */
+      :root {
+        --paper: #f6f8f8;
+        --card: #ffffff;
+        --ink: #1f3d66;
+        --ink-soft: #4f6680;
+        --slate: #6e95a2;
+        --slate-deep: #557c89;
+        --mist: #e5edef;
+        --rule: rgba(31, 61, 102, 0.16);
+        --serif: "Libre Bodoni", "Bodoni 72", Didot, Georgia, serif;
+        --script: "Mrs Saint Delafield", "Snell Roundhand", cursive;
+        --sans: "Montserrat", system-ui, sans-serif;
+        --gutter: 16px;
+        --section: 88px;
+        --radius: 18px;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font: 500 16px/1.6 var(--sans);
+        -webkit-font-smoothing: antialiased;
+      }
+      img { display: block; max-width: 100%; }
+      h1, h2, h3, p, dl, dd, ol, ul { margin: 0; padding: 0; }
+      ol, ul { list-style: none; }
+      a { color: inherit; }
+      section[id] { scroll-margin-top: 72px; }
+
+      .label {
+        font: 600 0.68rem/1.4 var(--sans);
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--slate-deep);
+      }
+      .script {
+        font-family: var(--script);
+        font-weight: 400;
+        text-transform: none;
+        letter-spacing: 0;
+        -webkit-text-stroke: 0.5px currentColor;
+      }
+      .tabular { font-variant-numeric: lining-nums tabular-nums; }
+      .mono {
+        display: block;
+        aspect-ratio: 724 / 491;
+        background: currentColor;
+        -webkit-mask: url(../images/logo.svg) center / contain no-repeat;
+        mask: url(../images/logo.svg) center / contain no-repeat;
+      }
+
+      /* Section headings mirror "SAVE the DATE": caps, script word between */
+      .heading {
+        text-align: center;
+        margin-bottom: 36px;
+      }
+      .heading h2 {
+        margin-top: 10px;
+        font: 500 clamp(2rem, 9vw, 3.2rem)/1 var(--serif);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+      .heading h2 .script {
+        font-size: 1.15em;
+        margin: 0 0.08em;
+        vertical-align: -0.08em;
+      }
+      .heading p:last-child:not(.label) {
+        margin: 14px auto 0;
+        max-width: 34ch;
+        color: var(--ink-soft);
+        text-wrap: balance;
+      }
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: var(--section) var(--gutter) 0;
+      }
+
+      /* ============ TOP BAR ============ */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px var(--gutter);
+        padding-top: calc(10px + env(safe-area-inset-top, 0px));
+        background: rgba(246, 248, 248, 0.88);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--rule);
+      }
+      .topbar .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .topbar .mono { width: 66px; margin: -6px 0; }
+      .topbar .brand span {
+        font: 600 0.72rem/1 var(--sans);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+      .menu-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 14px;
+        border: 1px solid var(--rule);
+        border-radius: 999px;
+        background: var(--card);
+        color: var(--ink);
+        font: 600 0.68rem/1 var(--sans);
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .menu-btn svg { width: 14px; height: 14px; }
+      .nav {
+        position: fixed;
+        inset: 0;
+        z-index: 30;
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        gap: 6px;
+        background: var(--ink);
+        color: #fff;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease, visibility 0.25s;
+      }
+      .nav.open { opacity: 1; visibility: visible; }
+      .nav a {
+        padding: 10px 24px;
+        font: 500 2rem/1.2 var(--serif);
+        text-transform: uppercase;
+        text-decoration: none;
+        letter-spacing: 0.04em;
+      }
+      .nav .close {
+        position: absolute;
+        top: calc(14px + env(safe-area-inset-top, 0px));
+        right: var(--gutter);
+        background: rgba(255, 255, 255, 0.12);
+        border-color: transparent;
+        color: #fff;
+      }
+      @media (min-width: 900px) {
+        .menu-btn.open-nav { display: none; }
+        .nav {
+          position: static;
+          display: flex;
+          gap: 4px;
+          background: none;
+          color: var(--ink);
+          opacity: 1;
+          visibility: visible;
+        }
+        .nav a {
+          padding: 8px 12px;
+          font: 600 0.68rem/1 var(--sans);
+          letter-spacing: 0.2em;
+        }
+        .nav a:last-of-type {
+          margin-left: 8px;
+          padding: 11px 18px;
+          border-radius: 999px;
+          background: var(--ink);
+          color: #fff;
+        }
+        .nav .close { display: none; }
+      }
+
+      /* ============ HERO ============ */
+      .hero {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 28px var(--gutter) 0;
+        text-align: center;
+      }
+      .hero h1 {
+        margin-top: 14px;
+        font: 500 clamp(2.5rem, 12vw, 5.2rem)/0.95 var(--serif);
+        text-transform: uppercase;
+      }
+      .hero h1 .script {
+        display: block;
+        font-size: 0.9em;
+        line-height: 1.1;
+        color: var(--slate-deep);
+      }
+      .hero-sub {
+        margin-top: 8px;
+        font-style: italic;
+        font-size: 1.05rem;
+        color: var(--ink-soft);
+      }
+      .hero-photo {
+        position: relative;
+        margin-top: 26px;
+        border-radius: var(--radius);
+        overflow: hidden;
+        aspect-ratio: 4 / 5;
+        background: var(--mist);
+      }
+      .hero-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 54% 40%;
+      }
+      @media (min-width: 760px) {
+        .hero-photo { aspect-ratio: 16 / 8; }
+        .hero-photo img { object-position: 50% 30%; }
+      }
+
+      /* ============ BOARDING PASS ============ */
+      /* Phone: stub on top, then fields, a perforation, then the date.
+         Wide: laid out sideways like the printed card. */
+      .pass {
+        --notch: 14px;
+        position: relative;
+        max-width: 880px;
+        margin: -64px auto 0;
+        display: grid;
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: 0 1px 0 var(--rule), 0 24px 50px -30px rgba(31, 61, 102, 0.45);
+        overflow: hidden;
+        text-align: left;
+      }
+      .pass-wrap { padding: 0 var(--gutter); position: relative; z-index: 2; }
+      .pass-stub {
+        background: var(--slate);
+        color: #fff;
+        padding: 10px 18px;
+        font: 500 0.78rem/1 var(--serif);
+        letter-spacing: 0.38em;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: space-between;
+      }
+      .pass-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px 16px;
+        padding: 22px 20px 24px;
+      }
+      .pass-fields .wide { grid-column: 1 / -1; }
+      .pass-fields dd {
+        margin-top: 4px;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.3;
+      }
+      .pass-fields .wide dd {
+        font: 500 1.6rem/1.1 var(--serif);
+        text-transform: uppercase;
+      }
+      .tear {
+        position: relative;
+        height: 0;
+        border-top: 2px dotted var(--rule);
+        margin: 0 calc(var(--notch) + 6px);
+      }
+      .tear::before,
+      .tear::after {
+        content: "";
+        position: absolute;
+        top: calc(var(--notch) * -1 - 1px);
+        width: calc(var(--notch) * 2);
+        height: calc(var(--notch) * 2);
+        border-radius: 50%;
+        background: var(--paper);
+      }
+      .tear::before { left: calc(var(--notch) * -2 - 6px); }
+      .tear::after { right: calc(var(--notch) * -2 - 6px); }
+      .pass-date {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 20px;
+        padding: 22px 20px 24px;
+      }
+      .date-box {
+        padding: 10px 18px 12px;
+        border: 1.5px solid var(--ink);
+        border-radius: 10px;
+        text-align: center;
+        font-family: var(--serif);
+        text-transform: uppercase;
+        line-height: 1;
+      }
+      .date-box span { display: block; font-size: 0.95rem; letter-spacing: 0.08em; }
+      .date-box strong { display: block; font-size: 2.8rem; font-weight: 600; margin: 4px 0; }
+      .countdown {
+        display: flex;
+        gap: 18px;
+        margin-top: 6px;
+      }
+      .countdown strong {
+        display: block;
+        font: 600 2rem/1 var(--serif);
+      }
+      .countdown .label { margin-top: 4px; font-size: 0.6rem; }
+      @media (min-width: 760px) {
+        .pass {
+          grid-template-columns: 52px 1fr 0 250px;
+          margin-top: -90px;
+        }
+        .pass-stub {
+          writing-mode: vertical-rl;
+          transform: rotate(180deg);
+          justify-content: center;
+          gap: 40px;
+          padding: 20px 0;
+          font-size: 0.85rem;
+        }
+        .pass-stub span:last-child { display: none; }
+        .pass-fields { padding: 32px 36px; gap: 24px; }
+        .pass-fields .wide dd { font-size: 2.1rem; }
+        .tear {
+          height: auto;
+          margin: calc(var(--notch) + 6px) 0;
+          border-top: 0;
+          border-left: 2px dotted var(--rule);
+        }
+        .tear::before,
+        .tear::after { left: calc(var(--notch) * -1 - 1px); right: auto; }
+        .tear::before { top: calc(var(--notch) * -2 - 6px); }
+        .tear::after { top: auto; bottom: calc(var(--notch) * -2 - 6px); }
+        .pass-date {
+          grid-template-columns: 1fr;
+          justify-items: center;
+          text-align: center;
+          padding: 28px 20px;
+        }
+        .countdown { justify-content: center; }
+      }
+
+      /* ============ WELCOME ============ */
+      .welcome {
+        max-width: 620px;
+        text-align: center;
+      }
+      .welcome p.body {
+        font-size: 1.08rem;
+        color: var(--ink-soft);
+        text-wrap: pretty;
+      }
+      .welcome .sign {
+        margin-top: 14px;
+        font: 400 2.6rem/1 var(--script);
+        -webkit-text-stroke: 0.5px currentColor;
+      }
+
+      /* ============ ITINERARY ============ */
+      /* A route line with stops, like a ferry timetable. */
+      .route {
+        position: relative;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      .route::before {
+        content: "";
+        position: absolute;
+        left: 23px;
+        top: 24px;
+        bottom: 24px;
+        border-left: 2px dotted var(--slate);
+      }
+      .stop {
+        position: relative;
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 16px;
+        padding-bottom: 28px;
+      }
+      .stop:last-child { padding-bottom: 0; }
+      .stop-icon {
+        position: relative;
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--card);
+        border: 1.5px solid var(--slate);
+        color: var(--ink);
+      }
+      .stop-icon svg { width: 22px; height: 22px; }
+      .stop-card {
+        background: var(--card);
+        border-radius: 14px;
+        padding: 18px 18px 20px;
+        box-shadow: 0 1px 0 var(--rule);
+      }
+      .stop-card time {
+        font: 600 0.72rem/1 var(--sans);
+        letter-spacing: 0.2em;
+        color: var(--slate-deep);
+      }
+      .stop-card h3 {
+        margin-top: 8px;
+        font: 500 1.5rem/1.15 var(--serif);
+      }
+      .stop-card p { margin-top: 6px; color: var(--ink-soft); font-size: 0.95rem; }
+      .stop-card .where {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed var(--rule);
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        font-size: 0.88rem;
+      }
+      .stop-card .where a {
+        flex: none;
+        font-weight: 600;
+        font-size: 0.72rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        text-underline-offset: 4px;
+      }
+
+      /* ============ TRAVEL ============ */
+      .travel-grid {
+        display: grid;
+        gap: 12px;
+      }
+      .connection {
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        gap: 14px;
+        align-items: start;
+        padding: 18px;
+        border-radius: 14px;
+        background: var(--card);
+        box-shadow: 0 1px 0 var(--rule);
+      }
+      .connection svg { width: 26px; height: 26px; color: var(--slate-deep); margin: 4px auto 0; }
+      .connection h3 { font: 600 0.95rem/1.3 var(--sans); }
+      .connection p { margin-top: 4px; font-size: 0.92rem; color: var(--ink-soft); }
+      .stay-title {
+        margin: 44px 0 14px;
+        text-align: center;
+      }
+      .hotels {
+        display: grid;
+        border-top: 1px solid var(--rule);
+      }
+      .hotels li {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        padding: 14px 2px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .hotels strong { font: 500 1.1rem/1.3 var(--serif); }
+      .hotels span { font-size: 0.82rem; color: var(--ink-soft); white-space: nowrap; }
+      @media (min-width: 760px) {
+        .travel-grid { grid-template-columns: repeat(3, 1fr); }
+        .hotels { grid-template-columns: 1fr 1fr; column-gap: 40px; }
+      }
+
+      /* ============ FAQ ============ */
+      .faq { max-width: 680px; margin: 0 auto; }
+      .faq details {
+        border-bottom: 1px solid var(--rule);
+      }
+      .faq details:first-child { border-top: 1px solid var(--rule); }
+      .faq summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 2px;
+        font: 500 1.15rem/1.3 var(--serif);
+        cursor: pointer;
+        list-style: none;
+      }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::after {
+        content: "+";
+        flex: none;
+        font: 500 1.4rem/1 var(--sans);
+        color: var(--slate-deep);
+        transition: transform 0.2s ease;
+      }
+      .faq details[open] summary::after { transform: rotate(45deg); }
+      .faq details p { padding: 0 2px 20px; color: var(--ink-soft); }
+
+      /* ============ REGISTRY ============ */
+      .registry {
+        display: grid;
+        gap: 10px;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      .registry a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 20px;
+        border: 1.5px solid var(--ink);
+        border-radius: 999px;
+        text-decoration: none;
+        font: 500 1.15rem/1 var(--serif);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .registry a span { font: 600 0.68rem/1 var(--sans); letter-spacing: 0.2em; }
+      @media (min-width: 760px) {
+        .registry { grid-template-columns: repeat(3, 1fr); max-width: none; }
+      }
+
+      /* ============ RSVP ============ */
+      .rsvp-card {
+        max-width: 640px;
+        margin: 0 auto;
+        background: var(--card);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: 0 1px 0 var(--rule), 0 24px 50px -30px rgba(31, 61, 102, 0.45);
+      }
+      .rsvp-card form {
+        display: grid;
+        gap: 18px;
+        padding: 24px 20px 28px;
+      }
+      .field label,
+      .field legend { display: block; margin-bottom: 8px; }
+      .field input,
+      .field textarea {
+        width: 100%;
+        padding: 13px 14px;
+        border: 1px solid var(--rule);
+        border-radius: 10px;
+        background: var(--paper);
+        color: var(--ink);
+        font: 500 1rem/1.4 var(--sans);
+      }
+      .field input:focus,
+      .field textarea:focus { outline: 2px solid var(--slate); outline-offset: 1px; }
+      fieldset { border: 0; margin: 0; padding: 0; }
+      .choices { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .choices label {
+        display: grid;
+        place-items: center;
+        padding: 14px 8px;
+        border: 1px solid var(--rule);
+        border-radius: 10px;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .choices input { position: absolute; top: 0; left: 0; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+      .choices input:checked + label { background: var(--ink); border-color: var(--ink); color: #fff; }
+      .choices input:focus-visible + label { outline: 2px solid var(--slate); outline-offset: 2px; }
+      .btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 24px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--ink);
+        color: #fff;
+        font: 600 0.75rem/1 var(--sans);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* ============ GALLERY ============ */
+      /* A swipeable strip on phones, a row on desktop. */
+      .strip {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding: 0 var(--gutter) 8px;
+        margin: 0 calc(var(--gutter) * -1);
+        scrollbar-width: none;
+      }
+      .strip::-webkit-scrollbar { display: none; }
+      .strip img {
+        flex: 0 0 72%;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+        border-radius: 14px;
+        scroll-snap-align: center;
+      }
+      .credit { margin-top: 16px; text-align: center; font-size: 0.78rem; color: var(--ink-soft); }
+      @media (min-width: 760px) {
+        .strip { overflow: visible; margin: 0; padding: 0; }
+        .strip img { flex: 1 1 0; min-width: 0; }
+      }
+
+      /* ============ FOOTER ============ */
+      footer {
+        margin-top: var(--section);
+        background: var(--slate);
+        color: #fff;
+        text-align: center;
+        padding: 56px var(--gutter) calc(110px + env(safe-area-inset-bottom, 0px));
+      }
+      footer .mono { width: 150px; margin: 0 auto; }
+      footer p { margin-top: 16px; font: 600 0.7rem/1.6 var(--sans); letter-spacing: 0.26em; text-transform: uppercase; }
+      footer .script { display: block; margin-top: 6px; font-size: 2.2rem; letter-spacing: 0; }
+
+      /* ============ STICKY CTA (phones) ============ */
+      .cta-bar {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+        z-index: 15;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 8px 8px 18px;
+        border-radius: 999px;
+        background: var(--ink);
+        color: #fff;
+        box-shadow: 0 16px 40px -16px rgba(16, 32, 56, 0.6);
+      }
+      .cta-bar p { font-size: 0.78rem; line-height: 1.3; }
+      .cta-bar p b { display: block; font: 500 1rem/1.2 var(--serif); }
+      .cta-bar .btn { background: #fff; color: var(--ink); padding: 13px 18px; }
+      @media (min-width: 900px) {
+        .cta-bar { display: none; }
+        footer { padding-bottom: 56px; }
+      }
+      @media (min-width: 760px) {
+        :root { --gutter: 32px; --section: 128px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Becky and Chris, home">
+        <i class="mono" aria-hidden="true"></i>
+        <span>Becky &amp; Chris</span>
+      </a>
+      <button class="menu-btn open-nav" type="button" aria-expanded="false" aria-controls="nav">
+        Menu
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 5h12M2 11h12" /></svg>
+      </button>
+      <nav class="nav" id="nav" aria-label="Main">
+        <button class="menu-btn close" type="button">Close</button>
+        <a href="#itinerary">The Day</a>
+        <a href="#travel">Travel</a>
+        <a href="#faq">FAQ</a>
+        <a href="#registry">Registry</a>
+        <a href="#rsvp">RSVP</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <p class="label">Set sail with us</p>
+        <h1>Becky &amp; Chris <span class="script">are getting married</span></h1>
+        <div class="hero-photo">
+          <picture>
+            <source media="(min-width: 760px)" srcset="../images/web/nose-to-nose-2400.jpg" />
+            <img
+              src="../images/web/gallery/4Y3A7236-2000.jpg"
+              alt="Becky and Chris on a foggy beach"
+              fetchpriority="high"
+            />
+          </picture>
+        </div>
+      </section>
+
+      <div class="pass-wrap">
+        <article class="pass" aria-label="Wedding details">
+          <div class="pass-stub"><span>Boarding pass</span><span>BC · 0612</span></div>
+          <dl class="pass-fields">
+            <div class="wide"><dt class="label">Destination</dt><dd>Portland, Maine</dd></div>
+            <div><dt class="label">Vessel</dt><dd>Schooner Timberwind</dd></div>
+            <div><dt class="label">Boarding</dt><dd class="tabular">3:30 PM</dd></div>
+            <div><dt class="label">Ashore</dt><dd>Rí Rá · Harbor Room</dd></div>
+            <div><dt class="label">Reply by</dt><dd class="tabular">May 1, 2027</dd></div>
+          </dl>
+          <div class="tear" aria-hidden="true"></div>
+          <div class="pass-date">
+            <div class="date-box tabular"><span>June</span><strong>12</strong><span>2027</span></div>
+            <div>
+              <p class="label">Departs in</p>
+              <div class="countdown tabular" role="timer">
+                <div><strong id="cdDays">—</strong><p class="label">Days</p></div>
+                <div><strong id="cdHours">—</strong><p class="label">Hours</p></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <section class="wrap welcome">
+        <p class="label">Welcome aboard</p>
+        <p class="body" style="margin-top: 16px">
+          We're tying the knot under sail on Casco Bay, then stepping ashore for drinks, dinner and
+          dessert on Portland's Old Port waterfront. Everything you need for the day is below, and
+          we can't wait to celebrate with you.
+        </p>
+        <p class="sign">Becky &amp; Chris</p>
+      </section>
+
+      <section class="wrap" id="itinerary">
+        <div class="heading">
+          <p class="label">Saturday, June 12</p>
+          <h2>Your <span class="script">itinerary</span></h2>
+          <p>Three stops, all a short walk apart along Commercial Street.</p>
+        </div>
+        <ol class="route">
+          <li class="stop">
+            <span class="stop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 3v14M12 4c3 2.5 5 6.5 5 11h-5M12 7c-2 2-3.5 5-4 8h4M3 18h18l-2 3H5z" /></svg>
+            </span>
+            <div class="stop-card">
+              <time class="tabular">3:30 – 5:30 PM</time>
+              <h3>The Ceremony</h3>
+              <p>Vows under sail aboard the historic Schooner Timberwind.</p>
+              <div class="where"><span>Ocean Gateway Pier · berth TBC</span><a href="#">Map</a></div>
+            </div>
+          </li>
+          <li class="stop">
+            <span class="stop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l-6 8zM12 11v9M8 20h8" /></svg>
+            </span>
+            <div class="stop-card">
+              <time class="tabular">5:30 – 6:30 PM</time>
+              <h3>Cocktail Hour</h3>
+              <p>Back on dry land for a drink by the harbor.</p>
+              <div class="where"><span>Rí Rá · The Harbor Room</span><a href="#">Map</a></div>
+            </div>
+          </li>
+          <li class="stop">
+            <span class="stop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 0 0 2 2v9M11 3v7a2 2 0 0 1-2 2M9 3v6M17 21V3c-2 1-3 4-3 8h3" /></svg>
+            </span>
+            <div class="stop-card">
+              <time class="tabular">6:30 – 9:00 PM</time>
+              <h3>Dinner &amp; Dessert</h3>
+              <p>A proper celebration, with all of our favorite people.</p>
+              <div class="where"><span>72 Commercial Street</span><a href="#">Map</a></div>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="wrap" id="travel">
+        <div class="heading">
+          <p class="label">Getting here</p>
+          <h2>Travel <span class="script">&amp;</span> Stay</h2>
+          <p>Everything happens within a few blocks of the Old Port.</p>
+        </div>
+        <div class="travel-grid">
+          <div class="connection">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M10 14 3 12l1-2 7 1 4-6c1-1.5 3-1.5 3 0l-3 7 5 2-1 2-5-1-4 6h-2l1-6z" /></svg>
+            <div><h3>By air</h3><p>Portland International Jetport (PWM) is about 10 minutes from the Old Port.</p></div>
+          </div>
+          <div class="connection">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="14" rx="3" /><path d="M5 11h14M8 21l2-4M16 21l-2-4M9 14h.01M15 14h.01" /></svg>
+            <div><h3>By rail</h3><p>The Amtrak Downeaster runs from Boston North Station to Portland.</p></div>
+          </div>
+          <div class="connection">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16V12l2-5h12l2 5v4zM4 16v3M20 16v3M7 13h.01M17 13h.01" /></svg>
+            <div><h3>By car</h3><p>Take I-295 into Portland. Garages along Commercial Street fill up on summer weekends.</p></div>
+          </div>
+        </div>
+
+        <p class="label stay-title">Where to stay</p>
+        <ul class="hotels">
+          <li><strong>Hilton Garden Inn</strong><span>65 Commercial St</span></li>
+          <li><strong>Portland Harbor Hotel</strong><span>468 Fore St</span></li>
+          <li><strong>The Press Hotel</strong><span>119 Exchange St</span></li>
+          <li><strong>AC Hotel Waterfront</strong><span>158 Fore St</span></li>
+        </ul>
+      </section>
+
+      <section class="wrap" id="faq">
+        <div class="heading">
+          <p class="label">Good to know</p>
+          <h2>Ask <span class="script">us</span> Anything</h2>
+        </div>
+        <div class="faq">
+          <details open>
+            <summary>What should I wear?</summary>
+            <p>Coastal cocktail: linen, sundresses, light suits. Flat or wedge shoes for the deck, and a layer, since the bay can be breezy even in June.</p>
+          </details>
+          <details>
+            <summary>Is everyone on the boat?</summary>
+            <p>Yes! Plan to be at the pier 20 minutes before boarding. Details on the exact berth will follow with your invitation.</p>
+          </details>
+          <details>
+            <summary>What happens if it rains?</summary>
+            <p>We'll share our weather plan here closer to the day.</p>
+          </details>
+          <details>
+            <summary>Can I bring a guest?</summary>
+            <p>Your invitation will list everyone we've saved a seat for.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="wrap" id="registry">
+        <div class="heading">
+          <p class="label">If you're so inclined</p>
+          <h2>Registry</h2>
+          <p>Your presence is the greatest gift of all.</p>
+        </div>
+        <div class="registry">
+          <a href="#">Zola <span>View ↗</span></a>
+          <a href="#">Amazon <span>View ↗</span></a>
+          <a href="#">Crate &amp; Barrel <span>View ↗</span></a>
+        </div>
+      </section>
+
+      <section class="wrap" id="rsvp">
+        <div class="heading">
+          <p class="label">Kindly reply by May 1, 2027</p>
+          <h2>Check <span class="script">in</span></h2>
+        </div>
+        <div class="rsvp-card">
+          <div class="pass-stub"><span>Boarding pass</span><span>RSVP</span></div>
+          <form onsubmit="event.preventDefault()">
+            <div class="field">
+              <label class="label" for="name">Full name</label>
+              <input id="name" autocomplete="name" placeholder="As it appears on your invitation" />
+            </div>
+            <fieldset class="field">
+              <legend class="label">Will you be aboard?</legend>
+              <div class="choices">
+                <input type="radio" name="att" id="yes" checked /><label for="yes">Joyfully accepts</label>
+                <input type="radio" name="att" id="no" /><label for="no">Regretfully declines</label>
+              </div>
+            </fieldset>
+            <div class="field">
+              <label class="label" for="diet">Dietary needs</label>
+              <input id="diet" placeholder="Optional" />
+            </div>
+            <button class="btn" type="submit">Send our reply</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="wrap" aria-label="Photos">
+        <div class="heading">
+          <p class="label">Moments</p>
+          <h2>Us, <span class="script">lately</span></h2>
+        </div>
+        <div class="strip">
+          <img src="../images/web/gallery/4Y3A6853-800.jpg" alt="Becky and Chris walking hand in hand along a rocky shore in the fog" />
+          <img src="../images/web/nose-to-nose-1200.jpg" alt="Becky and Chris, nose to nose on a foggy beach" style="object-position: 54% 50%" />
+          <img src="../images/web/gallery/4Y3A7236-800.jpg" alt="Chris dipping Becky for a kiss on the dunes" />
+        </div>
+        <p class="credit">Photography by Brielle D Photos</p>
+      </section>
+    </main>
+
+    <footer>
+      <i class="mono" aria-hidden="true"></i>
+      <p>June 12, 2027 · Portland, Maine</p>
+      <span class="script">See you aboard</span>
+    </footer>
+
+    <div class="cta-bar">
+      <p><b>Will you join us?</b>Reply by May 1, 2027</p>
+      <a class="btn" href="#rsvp">RSVP</a>
+    </div>
+
+    <script>
+      const weddingDate = new Date("2027-06-12T15:30:00-04:00").getTime();
+      function tick() {
+        const diff = Math.max(0, weddingDate - Date.now());
+        document.getElementById("cdDays").textContent = Math.floor(diff / 86400000);
+        document.getElementById("cdHours").textContent = String(Math.floor(diff / 3600000) % 24).padStart(2, "0");
+      }
+      tick();
+      setInterval(tick, 60000);
+
+      const nav = document.getElementById("nav");
+      const openBtn = document.querySelector(".open-nav");
+      const setNav = (open) => {
+        nav.classList.toggle("open", open);
+        openBtn.setAttribute("aria-expanded", String(open));
+      };
+      openBtn.addEventListener("click", () => setNav(true));
+      nav.querySelector(".close").addEventListener("click", () => setNav(false));
+      nav.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setNav(false)));
+    </script>
+  </body>
+</html>
