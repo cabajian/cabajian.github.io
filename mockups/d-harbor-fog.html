@@ -25,11 +25,11 @@
     </script>
     <style>
       /* Mockup D — "Harbor Fog"
-         Mockup C's layout (arched hero beside the names, swipeable day cards,
-         the harbor map, app-style tab bar) with Mockup B's fog: the arch
-         dissolves into mist, fog drifts behind the hero, photos fade in and
-         out of the page, glass tiles, and sections that surface from a blur
-         as you scroll. Mobile first; the tab bar becomes a top nav at 900px. */
+         Mockup C's layout (arched hero beside the names, navy countdown band,
+         swipeable day cards, the harbor map, app-style tab bar) with one touch
+         of Mockup B's fog: the hero arch dissolves into mist at the bottom.
+         Photos appear only in the hero and the gallery. Mobile first; the tab
+         bar becomes a top nav at 900px. */
       :root {
         --paper: #f5f4ef;
         --paper-rgb: 245, 244, 239;
@@ -181,33 +181,11 @@
 
       /* ============ HERO ============ */
       /* Fills the first screen: arch above the names on phones, side by side
-         from 900px. Fog drifts slowly behind both. */
+         from 900px. */
       .hero-screen {
-        position: relative;
-        isolation: isolate;
         min-height: calc(100svh - var(--tabbar-h));
         display: flex;
         flex-direction: column;
-        overflow: hidden;
-      }
-      .fog {
-        position: absolute;
-        inset: -10% -30%;
-        z-index: -1;
-        pointer-events: none;
-        background:
-          radial-gradient(38% 30% at 30% 30%, rgba(201, 219, 226, 0.75), transparent 70%),
-          radial-gradient(34% 26% at 72% 58%, rgba(224, 233, 233, 0.9), transparent 70%),
-          radial-gradient(30% 24% at 45% 85%, rgba(201, 219, 226, 0.5), transparent 70%);
-        filter: blur(30px);
-        animation: drift 40s ease-in-out infinite alternate;
-      }
-      .fog.two {
-        background:
-          radial-gradient(30% 24% at 65% 22%, rgba(255, 255, 255, 0.85), transparent 70%),
-          radial-gradient(36% 28% at 25% 70%, rgba(255, 255, 255, 0.7), transparent 70%);
-        animation-duration: 55s;
-        animation-direction: alternate-reverse;
       }
       .hero {
         flex: 1;
@@ -218,7 +196,7 @@
         text-align: center;
       }
       /* The arch keeps its crisp top and hairline frame, but the bottom
-         dissolves into the fog like the photos in B. */
+         dissolves into the page like the photos in B. */
       .arch {
         width: min(80vw, 40svh, 420px);
         margin: 0 auto;
@@ -264,38 +242,14 @@
       }
       .hero .actions { margin-top: 22px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 
-      /* ============ COUNTDOWN (fog band) ============ */
-      /* A veiled photo that fades in from the page above and back out below,
-         with frosted-glass tiles over it. */
-      .fogband {
-        position: relative;
-        isolation: isolate;
-        padding: 120px var(--gutter);
+      /* ============ COUNTDOWN BAND ============ */
+      .band {
+        background: var(--navy);
+        color: #fff;
         text-align: center;
       }
-      .fogband > img {
-        position: absolute;
-        inset: 0;
-        z-index: -2;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: 50% 45%;
-      }
-      .fogband::before {
-        content: "";
-        position: absolute;
-        inset: -1px 0;
-        z-index: -1;
-        background: linear-gradient(
-          to bottom,
-          var(--paper) 0%,
-          rgba(var(--paper-rgb), 0.5) 30%,
-          rgba(var(--paper-rgb), 0.42) 60%,
-          var(--paper) 100%
-        );
-      }
-      .fogband h2 {
+      .band .eyebrow { color: var(--pale); }
+      .band h2 {
         margin-top: 10px;
         font: 500 italic clamp(1.8rem, 7.5vw, 2.7rem)/1.2 var(--serif);
       }
@@ -309,21 +263,16 @@
       .count div {
         padding: 16px 0 12px;
         border-radius: 16px;
-        background: rgba(255, 255, 255, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 10px 30px -18px rgba(23, 58, 92, 0.45);
+        background: rgba(255, 255, 255, 0.07);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
       }
       .count strong { display: block; font: 600 clamp(1.7rem, 8vw, 2.8rem)/1 var(--serif); }
-      .count span { display: block; margin-top: 8px; font: 600 0.58rem/1 var(--sans); letter-spacing: 0.18em; color: var(--ink-soft); }
-      .fogband .when {
+      .count span { display: block; margin-top: 8px; font: 600 0.58rem/1 var(--sans); letter-spacing: 0.18em; color: var(--pale); }
+      .band .note {
         margin-top: 24px;
-        font: 600 0.72rem/1.6 var(--sans);
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: var(--ink-soft);
-        text-wrap: balance;
+        font: 400 2rem/1 var(--script);
+        color: var(--pale);
+        -webkit-text-stroke: 0.4px currentColor;
       }
 
       /* ============ DAY CARDS ============ */
@@ -349,17 +298,16 @@
         box-shadow: 0 1px 0 var(--rule), 0 18px 40px -28px rgba(23, 58, 92, 0.5);
         overflow: hidden;
       }
-      /* Each card top is a little patch of weather: mist, then sea, then dusk */
       .card-top {
         position: relative;
         display: grid;
         place-items: center;
         aspect-ratio: 16 / 10;
-        background: radial-gradient(70% 90% at 30% 20%, #fff, var(--seaglass) 70%);
+        background: var(--seaglass);
         color: var(--navy);
       }
-      .card:nth-child(2) .card-top { background: radial-gradient(70% 90% at 70% 20%, #eef4f5, var(--pale) 75%); }
-      .card:nth-child(3) .card-top { background: radial-gradient(80% 100% at 50% 0%, #2c5274, var(--navy-deep) 75%); color: #fff; }
+      .card:nth-child(2) .card-top { background: var(--pale); }
+      .card:nth-child(3) .card-top { background: var(--navy); color: #fff; }
       .card-top svg { width: 64px; height: 64px; }
       .card-top time {
         position: absolute;
@@ -385,59 +333,8 @@
       .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--rule); transition: width 0.25s ease, background 0.25s ease; }
       .dots i.on { width: 18px; border-radius: 3px; background: var(--navy); }
 
-      /* ============ INTERLUDE ============ */
-      /* A full-bleed photo that surfaces out of the fog and sinks back in. */
-      .interlude {
-        position: relative;
-        height: min(78svh, 680px);
-        display: grid;
-        align-items: end;
-        justify-items: center;
-        text-align: center;
-        isolation: isolate;
-        overflow: hidden;
-      }
-      .interlude img {
-        position: absolute;
-        inset: 0;
-        z-index: -2;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: 54% 35%;
-      }
-      .interlude::before {
-        content: "";
-        position: absolute;
-        inset: -1px 0;
-        z-index: -1;
-        background: linear-gradient(
-          to bottom,
-          var(--paper) 0%,
-          rgba(var(--paper-rgb), 0) 22%,
-          rgba(var(--paper-rgb), 0) 52%,
-          rgba(var(--paper-rgb), 0.75) 80%,
-          var(--paper) 100%
-        );
-      }
-      .interlude p {
-        padding: 0 var(--gutter) 36px;
-        font: 400 clamp(2.3rem, 10vw, 4.4rem)/1.05 var(--script);
-        -webkit-text-stroke: 0.6px currentColor;
-        text-wrap: balance;
-      }
-
       /* ============ BEARINGS (map) ============ */
-      /* Sea-glass section whose edges blur into the page instead of a hard line */
-      .bearings {
-        background: linear-gradient(
-          to bottom,
-          var(--paper),
-          var(--seaglass) 140px,
-          var(--seaglass) calc(100% - 140px),
-          var(--paper)
-        );
-      }
+      .bearings { background: var(--seaglass); }
       .map-card {
         border-radius: 22px;
         overflow: hidden;
@@ -566,7 +463,7 @@
         margin: 0 auto;
       }
       .gallery li.wide { grid-column: 1 / -1; order: 1; }
-      .gallery a {
+      .gallery li a {
         display: block;
         height: 100%;
         aspect-ratio: 2 / 3;
@@ -576,14 +473,16 @@
         cursor: zoom-in;
       }
       .gallery li.wide a { aspect-ratio: 3 / 2; }
-      .gallery img {
+      .gallery li img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         transition: transform 0.8s var(--ease);
       }
-      .gallery a:hover img { transform: scale(1.04); }
+      .gallery li a:hover img { transform: scale(1.04); }
       .credit { margin-top: 18px; text-align: center; font-size: 0.78rem; color: var(--ink-soft); }
+      .album-link { margin-top: 22px; text-align: center; }
+      .album-link svg { width: 16px; height: 16px; }
 
       /* ============ RSVP ============ */
       /* Navy, rising like a sheet with rounded shoulders that echo the arch */
@@ -768,16 +667,10 @@
         }
         .hero-copy { order: -1; margin-top: 0; }
         .hero h1 { font-size: clamp(4rem, 6.6vw, 6.4rem); }
-        .interlude img { object-position: 54% 18%; }
         .arch { width: min(100%, 64svh, 500px); }
-        .fogband { padding-block: 160px; }
       }
 
       /* ============ MOTION ============ */
-      @keyframes drift {
-        from { transform: translate3d(-4%, -2%, 0); }
-        to { transform: translate3d(4%, 3%, 0); }
-      }
       @keyframes settle {
         from { scale: 1.06; }
         to { scale: 1; }
@@ -786,30 +679,26 @@
         from { opacity: 0; }
       }
       @keyframes rise {
-        from { opacity: 0; filter: blur(8px); transform: translateY(16px); }
+        from { opacity: 0; transform: translateY(16px); }
       }
       .rise { animation: rise 1.2s var(--ease) both; }
       .rise-2 { animation-delay: 0.15s; }
       .rise-3 { animation-delay: 0.3s; }
-      /* Sections surface from a blur as they scroll into view, as if out of fog */
       .js .reveal {
         opacity: 0;
-        filter: blur(8px);
         transform: translateY(20px);
-        transition: opacity 1s var(--ease), filter 1s var(--ease), transform 1s var(--ease);
+        transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
       }
-      .js .reveal.in { opacity: 1; filter: none; transform: none; }
+      .js .reveal.in { opacity: 1; transform: none; }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
-        .fog, .arch-photo img, .rise, .lightbox[open] { animation: none; }
-        .js .reveal { opacity: 1; filter: none; transform: none; transition: none; }
+        .arch-photo img, .rise, .lightbox[open] { animation: none; }
+        .js .reveal { opacity: 1; transform: none; transition: none; }
       }
     </style>
   </head>
   <body>
     <div class="hero-screen">
-      <div class="fog" aria-hidden="true"></div>
-      <div class="fog two" aria-hidden="true"></div>
       <header class="site-header">
         <a class="brand" href="#top" aria-label="Becky and Chris, home">
           <i class="mono" aria-hidden="true"></i>
@@ -848,8 +737,7 @@
     </div>
 
     <main>
-      <section class="fogband" aria-labelledby="count-title">
-        <img src="../images/web/gallery/4Y3A6853-2000.jpg" alt="" loading="lazy" />
+      <section class="band block" aria-labelledby="count-title">
         <div class="reveal">
           <p class="eyebrow">Until we tie the knot</p>
           <h2 id="count-title">Our adventure begins in…</h2>
@@ -859,7 +747,7 @@
             <div><strong id="cdMins">—</strong><span>MIN</span></div>
             <div><strong id="cdSecs">—</strong><span>SEC</span></div>
           </div>
-          <p class="when">Saturday, June 12, 2027 · Old Port, Portland</p>
+          <p class="note">Good things are worth the voyage</p>
         </div>
       </section>
 
@@ -910,11 +798,6 @@
           </div>
           <div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
         </div>
-      </section>
-
-      <section class="interlude" aria-label="Photo">
-        <img src="../images/web/nose-to-nose-2400.jpg" alt="Becky and Chris, nose to nose on a foggy beach" loading="lazy" />
-        <p class="reveal">Good things are worth the voyage</p>
       </section>
 
       <section class="block bearings" id="bearings">
@@ -1032,6 +915,14 @@
           <li><a href="../images/web/gallery/4Y3A6853-2000.jpg"><img src="../images/web/gallery/4Y3A6853-800.jpg" width="800" height="1200" alt="Becky and Chris walking hand in hand along a rocky shore in the fog" loading="lazy" /></a></li>
         </ul>
         <p class="credit">Photography by Brielle D Photos</p>
+        <!-- Replace href with the shared Google Photos album link
+             (in Google Photos: album → Share → Create link). -->
+        <p class="album-link">
+          <a class="btn ghost" href="#" target="_blank" rel="noreferrer">
+            See all our photos
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+          </a>
+        </p>
       </section>
 
       <section class="block rsvp" id="rsvp">
@@ -1167,7 +1058,7 @@
       }
 
       // Gallery lightbox
-      const links = [...document.querySelectorAll(".gallery a")];
+      const links = [...document.querySelectorAll(".gallery li a")];
       const lb = document.querySelector(".lightbox");
       const lbImg = lb.querySelector("img");
       const lbCount = lb.querySelector(".lb-count");
