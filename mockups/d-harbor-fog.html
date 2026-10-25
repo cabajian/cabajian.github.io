@@ -280,22 +280,20 @@
       .album-link { margin-top: 22px; text-align: center; }
 
       /* ============ FOOTER ============ */
+      /* One quiet line under a hairline; names and date stack on phones */
       footer {
-        padding: 56px var(--gutter) calc(48px + env(safe-area-inset-bottom, 0px));
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 28px var(--gutter) calc(32px + env(safe-area-inset-bottom, 0px));
+        border-top: 1px solid var(--rule);
         text-align: center;
-        background: var(--navy-deep);
-        color: var(--pale);
+        font: 600 0.66rem/1.8 var(--sans);
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
       }
-      footer .mono { width: 140px; margin: 0 auto 10px; color: #fff; }
-      footer .sign {
-        margin: 0;
-        font: 400 2.2rem/1.1 var(--script);
-        letter-spacing: 0;
-        text-transform: none;
-        color: #fff;
-        -webkit-text-stroke: 0.4px currentColor;
-      }
-      footer p { margin-top: 6px; font: 600 0.66rem/1.6 var(--sans); letter-spacing: 0.26em; text-transform: uppercase; }
+      footer span { display: block; }
+      footer .sep { display: none; }
 
       /* ============ LIGHTBOX ============ */
       .lightbox {
@@ -357,6 +355,7 @@
       @media (min-width: 760px) {
         :root { --gutter: 32px; --section: 120px; }
         .details-card { grid-template-columns: 1fr 1fr; }
+        footer span, footer .sep { display: inline; }
         .details-card > div { padding: 40px 24px; }
         .details-card > div + div { border-top: 0; border-left: 1px solid var(--rule); }
         .gallery ul { grid-template-columns: 1fr 2fr 1fr; gap: 14px; }
@@ -503,9 +502,7 @@
     </main>
 
     <footer>
-      <i class="mono" aria-hidden="true"></i>
-      <p class="sign">With love, Becky &amp; Chris</p>
-      <p>June 12, 2027 · Portland, Maine</p>
+      <span>Becky &amp; Chris</span><span class="sep" aria-hidden="true"> · </span><span>June 12, 2027 · Portland, Maine</span>
     </footer>
 
     <dialog class="lightbox" aria-label="Photo viewer">
