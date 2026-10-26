@@ -12,12 +12,13 @@
     <meta property="og:title" content="Becky &amp; Chris · June 12, 2027" />
     <meta property="og:description" content="A celebration by land &amp; sea in Portland, Maine." />
     <meta property="og:image" content="images/web/nose-to-nose-1200.jpg" />
-    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png" />
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@500;600&family=Mrs+Saint+Delafield&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:wght@500;600&family=Montserrat:wght@500;600&family=Mrs+Saint+Delafield&display=swap"
       rel="stylesheet"
     />
     <script>
@@ -25,9 +26,11 @@
     </script>
     <style>
       /* A full-screen photo that dissolves into the page beneath the names,
-         a sea-glass countdown panel, the date and place, and the gallery.
-         The schedule, travel, RSVP and registry come later. Mobile first.
-         Design explorations live in mockups/. */
+         a sea-glass countdown banner, the date and place, and the gallery.
+         The schedule, travel, RSVP and registry come later. Mobile first;
+         from 1600px wide the layout stops growing and the hero photo's edges
+         blur out to the sides of the screen. Design explorations live in
+         mockups/. */
       :root {
         --paper: #f3f5f5;
         --paper-rgb: 243, 245, 245;
@@ -45,6 +48,8 @@
         --gutter: 18px;
         --section: 88px;
         --radius: 24px;
+        /* Past this width the hero stops growing; content columns are narrower */
+        --max: 1600px;
         --ease: cubic-bezier(0.22, 1, 0.36, 1);
       }
       *, *::before, *::after { box-sizing: border-box; }
@@ -124,6 +129,16 @@
         overflow: hidden;
         z-index: -2;
       }
+      /* The sharp photo lives in a frame no wider than --max. Beyond that the
+         photo's edges are stretched out to the sides (see the 1600px rules). */
+      .hero-frame {
+        position: absolute;
+        inset: 0;
+        margin: 0 auto;
+        width: min(100%, var(--max));
+        overflow: hidden;
+      }
+      .hero-side { display: none; }
       /* The photo is enlarged 5% so it can slide sideways, and slides to put
          the point where their noses meet (53.7% across, 38.5% down) above the
          names. On narrow screens that's exact; on wide ones the clamp stops it
@@ -173,42 +188,26 @@
       .hero .eyebrow { margin-top: 14px; }
 
       /* ============ COUNTDOWN ============ */
-      /* A soft sea-glass panel with white tiles, inset from the page edges */
-      .countdown { padding: 16px var(--gutter) 0; }
-      .countdown-panel {
-        max-width: 880px;
-        margin: 0 auto;
-        padding: 56px 16px 48px;
-        border-radius: var(--radius);
+      /* A full-width sea-glass banner; the numbers are divided by hairlines */
+      .countdown {
+        padding: 64px var(--gutter);
         background: var(--seaglass);
         text-align: center;
       }
       .countdown h2 {
         margin-top: 10px;
-        font: 500 italic clamp(1.7rem, 7vw, 2.7rem)/1.2 var(--serif);
+        font: 500 clamp(1.8rem, 7.5vw, 2.7rem)/1.15 var(--serif);
         text-wrap: balance;
       }
       .count {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-        max-width: 560px;
-        margin: 28px auto 0;
+        max-width: 600px;
+        margin: 30px auto 0;
       }
-      .count div {
-        padding: 16px 0 12px;
-        border-radius: 16px;
-        background: var(--card);
-        box-shadow: 0 1px 0 var(--rule), 0 12px 28px -22px rgba(23, 58, 92, 0.5);
-      }
-      .count strong { display: block; font: 600 clamp(1.7rem, 8vw, 2.8rem)/1 var(--serif); }
-      .count span { display: block; margin-top: 8px; font: 600 0.58rem/1 var(--sans); letter-spacing: 0.18em; color: var(--ink-soft); }
-      .countdown .note {
-        margin-top: 24px;
-        color: var(--ink-soft);
-        font-size: 2rem;
-        line-height: 1;
-      }
+      .count div + div { border-left: 1px solid var(--rule); }
+      .count strong { display: block; font: 600 clamp(2rem, 9vw, 3.2rem)/1 var(--serif); }
+      .count span { display: block; margin-top: 10px; font: 600 0.6rem/1 var(--sans); letter-spacing: 0.2em; color: var(--ink-soft); }
 
       /* ============ DETAILS ============ */
       /* One card, When and Where stacked on phones and side by side wider. */
@@ -237,7 +236,7 @@
         max-width: 30rem;
         margin: 32px auto 0;
         text-align: center;
-        font: 500 italic 1.15rem/1.5 var(--serif);
+        font: 500 1rem/1.6 var(--sans);
         color: var(--ink-soft);
         text-wrap: balance;
       }
@@ -372,7 +371,44 @@
           min-height: max(100svh, calc(36vw + 400px));
         }
         .hero-content { padding-bottom: 44px; }
-        .countdown-panel { padding: 72px 32px 64px; }
+        .countdown { padding-block: 88px; }
+      }
+
+      @media (min-width: 1600px) {
+        .hero {
+          --photo-h: 704px; /* 44vw at 1600px */
+          min-height: 976px; /* 36vw + 400px at 1600px */
+        }
+        /* Each side takes a 24px-wide strip from that edge of the photo (as
+           the frame shows it: 1712px wide, its left 112px cropped, nudged up
+           46px) and stretches it out to the screen edge, then blurs it. The
+           sides run 240px under the frame, where its edges fade out, and 60px
+           past the screen edges (so the image sits 60 - 46 = 14px down) so
+           the blur doesn't thin out at the edges.
+           Side width: 50vw - 800px + 240px + 60px = 50vw - 500px. */
+        .hero-side {
+          --side-w: calc(50vw - 500px);
+          display: block;
+          position: absolute;
+          top: -60px;
+          bottom: -60px;
+          width: var(--side-w);
+          background: url(images/web/nose-to-nose-1200.jpg) no-repeat;
+          background-size: calc(var(--side-w) * 71.3333) 1141px; /* 1712 / 24 */
+          filter: blur(24px);
+        }
+        .hero-side.left {
+          left: -60px;
+          background-position: calc(var(--side-w) * -4.6667) 14px; /* 112 / 24 */
+        }
+        .hero-side.right {
+          right: -60px;
+          background-position: calc(var(--side-w) * -70.3333) 14px; /* 1688 / 24 */
+        }
+        .hero-frame {
+          -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+        }
       }
 
       /* ============ MOTION ============ */
@@ -405,14 +441,18 @@
   <body>
     <header class="hero" id="top">
       <div class="hero-photo">
-        <img
-          class="hero-img"
-          src="images/web/nose-to-nose-1200.jpg"
-          srcset="images/web/nose-to-nose-1200.jpg 1200w, images/web/nose-to-nose-2400.jpg 2400w"
-          sizes="max(105vw, 111svh)"
-          alt="Becky and Chris, nose to nose on a foggy beach"
-          fetchpriority="high"
-        />
+        <div class="hero-side left" aria-hidden="true"></div>
+        <div class="hero-side right" aria-hidden="true"></div>
+        <div class="hero-frame">
+          <img
+            class="hero-img"
+            src="images/web/nose-to-nose-1200.jpg"
+            srcset="images/web/nose-to-nose-1200.jpg 1200w, images/web/nose-to-nose-2400.jpg 2400w"
+            sizes="max(105vw, 111svh)"
+            alt="Becky and Chris, nose to nose on a foggy beach"
+            fetchpriority="high"
+          />
+        </div>
       </div>
       <div class="hero-content">
         <h1 class="rise">Becky <span class="script">&amp;</span> Chris</h1>
@@ -423,16 +463,15 @@
 
     <main>
       <section class="countdown" aria-labelledby="count-title">
-        <div class="countdown-panel reveal">
+        <div class="reveal">
           <p class="eyebrow">Until we tie the knot</p>
-          <h2 id="count-title">Our adventure begins in…</h2>
+          <h2 id="count-title">Our adventure begins in</h2>
           <div class="count tabular" role="timer" aria-live="off">
             <div><strong id="cdDays">—</strong><span>DAYS</span></div>
             <div><strong id="cdHours">—</strong><span>HOURS</span></div>
             <div><strong id="cdMins">—</strong><span>MIN</span></div>
             <div><strong id="cdSecs">—</strong><span>SEC</span></div>
           </div>
-          <p class="note script">Good things are worth the voyage</p>
         </div>
       </section>
 
