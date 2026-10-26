@@ -46,7 +46,7 @@
         --script: "Mrs Saint Delafield", "Snell Roundhand", cursive;
         --sans: "Montserrat", system-ui, sans-serif;
         --gutter: 18px;
-        --section: 88px;
+        --section: 104px;
         --radius: 24px;
         /* Past this width the hero stops growing; content columns are narrower */
         --max: 1600px;
@@ -84,7 +84,7 @@
       }
       .tabular { font-variant-numeric: lining-nums tabular-nums; }
       .block { padding: var(--section) var(--gutter); }
-      .heading { text-align: center; max-width: 34rem; margin: 0 auto 32px; }
+      .heading { text-align: center; max-width: 34rem; margin: 0 auto 40px; }
       .heading h2 {
         margin-top: 10px;
         font: 500 clamp(2.1rem, 9vw, 3.2rem)/1.05 var(--serif);
@@ -190,7 +190,8 @@
       /* ============ COUNTDOWN ============ */
       /* A full-width sea-glass banner; the numbers are divided by hairlines */
       .countdown {
-        padding: 64px var(--gutter);
+        margin-top: 64px; /* extra air between the names and the banner */
+        padding: 80px var(--gutter);
         background: var(--seaglass);
         text-align: center;
       }
@@ -348,7 +349,7 @@
 
       /* ============ WIDER SCREENS ============ */
       @media (min-width: 760px) {
-        :root { --gutter: 32px; --section: 120px; }
+        :root { --gutter: 32px; --section: 152px; }
         .details-card { grid-template-columns: 1fr 1fr; }
         footer span, footer .sep { display: inline; }
         .details-card > div { padding: 40px 24px; }
@@ -371,7 +372,7 @@
           min-height: max(100svh, calc(36vw + 400px));
         }
         .hero-content { padding-bottom: 44px; }
-        .countdown { padding-block: 88px; }
+        .countdown { margin-top: 96px; padding-block: 112px; }
       }
 
       @media (min-width: 1600px) {

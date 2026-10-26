@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 130 668 326">
+  <!-- The sailboat from logo.svg without the C/B monogram, redrawn as strokes
+       on the same coordinates: mast, mainsail with boom, jib, and two wakes. -->
+  <g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M372 145 L395 442" />
+    <path d="M373 145 C440 168 522 250 516 345 L390 345" />
+    <path d="M371 150 C368 240 347 326 303 381 C332 389 366 382 387 362" />
+    <path d="M53 428 C110 386 200 390 300 402 C400 412 490 382 569 346" />
+    <path d="M466 420 C560 430 640 414 694 379" />
+  </g>
+</svg>
