@@ -8,7 +8,7 @@
       name="description"
       content="Becky and Chris are getting married on June 12, 2027 in the Old Port, Portland, Maine. More details coming in 2027."
     />
-    <meta name="theme-color" content="#f5f4ef" />
+    <meta name="theme-color" content="#f3f5f5" />
     <meta property="og:title" content="Becky &amp; Chris · June 12, 2027" />
     <meta property="og:description" content="A celebration by land &amp; sea in Portland, Maine." />
     <meta property="og:image" content="images/web/nose-to-nose-1200.jpg" />
@@ -24,19 +24,19 @@
       document.documentElement.classList.add("js");
     </script>
     <style>
-      /* Arched hero beside the names (its bottom dissolving into mist),
-         a navy countdown band, the date and place, and the gallery. The
-         schedule, travel, RSVP and registry come later. Mobile first; the
-         hero goes side by side from 900px. Design explorations live in
-         mockups/. */
+      /* A full-screen photo that dissolves into the page beneath the names,
+         a sea-glass countdown panel, the date and place, and the gallery.
+         The schedule, travel, RSVP and registry come later. Mobile first.
+         Design explorations live in mockups/. */
       :root {
-        --paper: #f5f4ef;
-        --card: #fffefa;
+        --paper: #f3f5f5;
+        --paper-rgb: 243, 245, 245;
+        --card: #ffffff;
         --navy: #173a5c;
         --navy-deep: #102c47;
         --ink-soft: #4d6479;
         --slate: #6e95a2;
-        --seaglass: #e0e9e9;
+        --seaglass: #e1eaec;
         --pale: #c9dbe2;
         --rule: rgba(23, 58, 92, 0.16);
         --serif: "Libre Bodoni", "Bodoni 72", Didot, Georgia, serif;
@@ -44,6 +44,7 @@
         --sans: "Montserrat", system-ui, sans-serif;
         --gutter: 18px;
         --section: 88px;
+        --radius: 24px;
         --ease: cubic-bezier(0.22, 1, 0.36, 1);
       }
       *, *::before, *::after { box-sizing: border-box; }
@@ -67,14 +68,16 @@
         text-transform: uppercase;
         color: var(--slate);
       }
-      .tabular { font-variant-numeric: lining-nums tabular-nums; }
-      .mono {
-        display: block;
-        aspect-ratio: 724 / 491;
-        background: currentColor;
-        -webkit-mask: url(images/logo.svg) center / contain no-repeat;
-        mask: url(images/logo.svg) center / contain no-repeat;
+      .script {
+        font-family: var(--script);
+        font-weight: 400;
+        text-transform: none;
+        letter-spacing: 0;
+        color: var(--slate);
+        /* The script only comes in a hairline weight; a faint stroke firms it up */
+        -webkit-text-stroke: 0.5px currentColor;
       }
+      .tabular { font-variant-numeric: lining-nums tabular-nums; }
       .block { padding: var(--section) var(--gutter); }
       .heading { text-align: center; max-width: 34rem; margin: 0 auto 32px; }
       .heading h2 {
@@ -102,94 +105,88 @@
       a:focus-visible { outline: 2px solid var(--slate); outline-offset: 3px; }
 
       /* ============ HERO ============ */
-      /* Fills the first screen: arch above the names on phones, side by side
-         from 900px. */
-      .hero-screen {
-        min-height: 100svh;
-        display: flex;
-        flex-direction: column;
-      }
-      .site-header {
-        display: flex;
-        justify-content: center;
-        padding: calc(14px + env(safe-area-inset-top, 0px)) var(--gutter) 0;
-      }
-      .brand { text-align: center; text-decoration: none; }
-      .brand .mono { width: 76px; margin: 0 auto; }
-      .brand span {
-        display: block;
-        margin-top: 2px;
-        font: 600 0.6rem/1 var(--sans);
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        color: var(--slate);
-      }
       .hero {
-        flex: 1;
+        --photo-h: 74svh;
+        --photo-shift-y: 0%;
+        position: relative;
+        min-height: 100svh;
         display: grid;
-        align-content: center;
-        gap: 20px;
-        padding: 18px var(--gutter) 44px;
-        text-align: center;
-      }
-      /* The arch keeps its crisp top and hairline frame, but the bottom
-         dissolves into the page like the photos in B. */
-      .arch {
-        width: min(80vw, 44svh, 420px);
-        margin: 0 auto;
-        padding: 7px;
-        border: 1px solid var(--rule);
-        border-radius: 999px 999px 0 0;
-        -webkit-mask-image: linear-gradient(to bottom, #000 64%, transparent 97%);
-        mask-image: linear-gradient(to bottom, #000 64%, transparent 97%);
-      }
-      .arch-photo {
-        aspect-ratio: 4 / 5;
-        border-radius: 999px 999px 0 0;
+        align-items: end;
         overflow: hidden;
-        background: var(--seaglass);
+        isolation: isolate;
       }
-      .arch-photo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: 50% 40%;
-        animation: settle 14s var(--ease) both;
+      /* Photo fills the top of the screen, then dissolves into the page
+         like the fog it was shot in; the type sits below the faces. */
+      .hero-photo {
+        position: absolute;
+        inset: 0 0 auto;
+        height: var(--photo-h);
+        overflow: hidden;
+        z-index: -2;
       }
-      .hero-copy { margin-top: -28px; }
+      /* The photo is enlarged 5% so it can slide sideways, and slides to put
+         the point where their noses meet (53.7% across, 38.5% down) above the
+         names. On narrow screens that's exact; on wide ones the clamp stops it
+         before the right edge would show, leaving the noses a touch right of
+         center. */
+      .hero-img {
+        --img-w: max(107%, calc(var(--photo-h) * 1.5));
+        position: absolute;
+        top: 0;
+        left: clamp(calc(100% - var(--img-w)), calc(50% - 0.537 * var(--img-w)), 0px);
+        width: var(--img-w);
+        max-width: none;
+        height: auto;
+        translate: 0 var(--photo-shift-y);
+        transform-origin: 53.7% 38.5%;
+        animation: settle 14s ease-out both;
+      }
+      /* The fade runs a few px past the photo's bottom edge so no sliver of
+         photo can show through at the seam. */
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: calc(var(--photo-h) + 6px);
+        z-index: -1;
+        background: linear-gradient(
+          to bottom,
+          rgba(var(--paper-rgb), 0) 0%,
+          rgba(var(--paper-rgb), 0) 50%,
+          rgba(var(--paper-rgb), 0.7) 76%,
+          var(--paper) calc(100% - 10px)
+        );
+      }
+      .hero-content {
+        text-align: center;
+        padding: 0 var(--gutter) calc(56px + env(safe-area-inset-bottom, 0px));
+      }
       .hero h1 {
-        margin-top: 10px;
         font: 500 clamp(2.8rem, 13vw, 5.4rem)/1 var(--serif);
       }
-      .hero h1 .amp {
-        font-family: var(--script);
-        font-weight: 400;
-        font-size: 1.1em;
-        color: var(--slate);
-        /* The script only comes in a hairline weight; a faint stroke firms it up */
-        -webkit-text-stroke: 0.5px currentColor;
-      }
+      .hero h1 .script { font-size: 1.1em; }
       .hero .date {
-        margin-top: 10px;
+        margin-top: 14px;
         font: 600 0.8rem/1 var(--sans);
         letter-spacing: 0.32em;
       }
-      .hero .tagline {
-        margin-top: 14px;
-        font: 500 italic 1.2rem/1.4 var(--serif);
-        color: var(--ink-soft);
-      }
+      .hero .eyebrow { margin-top: 14px; }
 
-      /* ============ COUNTDOWN BAND ============ */
-      .band {
-        background: var(--navy);
-        color: #fff;
+      /* ============ COUNTDOWN ============ */
+      /* A soft sea-glass panel with white tiles, inset from the page edges */
+      .countdown { padding: 16px var(--gutter) 0; }
+      .countdown-panel {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 56px 16px 48px;
+        border-radius: var(--radius);
+        background: var(--seaglass);
         text-align: center;
       }
-      .band .eyebrow { color: var(--pale); }
-      .band h2 {
+      .countdown h2 {
         margin-top: 10px;
-        font: 500 italic clamp(1.8rem, 7.5vw, 2.7rem)/1.2 var(--serif);
+        font: 500 italic clamp(1.7rem, 7vw, 2.7rem)/1.2 var(--serif);
+        text-wrap: balance;
       }
       .count {
         display: grid;
@@ -201,16 +198,16 @@
       .count div {
         padding: 16px 0 12px;
         border-radius: 16px;
-        background: rgba(255, 255, 255, 0.07);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+        background: var(--card);
+        box-shadow: 0 1px 0 var(--rule), 0 12px 28px -22px rgba(23, 58, 92, 0.5);
       }
       .count strong { display: block; font: 600 clamp(1.7rem, 8vw, 2.8rem)/1 var(--serif); }
-      .count span { display: block; margin-top: 8px; font: 600 0.58rem/1 var(--sans); letter-spacing: 0.18em; color: var(--pale); }
-      .band .note {
+      .count span { display: block; margin-top: 8px; font: 600 0.58rem/1 var(--sans); letter-spacing: 0.18em; color: var(--ink-soft); }
+      .countdown .note {
         margin-top: 24px;
-        font: 400 2rem/1 var(--script);
-        color: var(--pale);
-        -webkit-text-stroke: 0.4px currentColor;
+        color: var(--ink-soft);
+        font-size: 2rem;
+        line-height: 1;
       }
 
       /* ============ DETAILS ============ */
@@ -219,7 +216,7 @@
         max-width: 760px;
         margin: 0 auto;
         display: grid;
-        border-radius: 22px;
+        border-radius: var(--radius);
         background: var(--card);
         box-shadow: 0 1px 0 var(--rule), 0 18px 40px -28px rgba(23, 58, 92, 0.5);
         text-align: center;
@@ -366,20 +363,16 @@
         .lb-next { right: 24px; }
         .lb-count { bottom: 22px; }
       }
+      /* On wide screens the photo's height tracks width, so size the hero
+         from both axes to keep the type clear of their faces. */
       @media (min-width: 900px) {
-        /* Names on the left, arch on the right, filling the screen */
         .hero {
-          grid-template-columns: 1fr 1fr;
-          align-items: center;
-          width: 100%;
-          max-width: 1240px;
-          margin: 0 auto;
-          gap: 48px;
-          padding-top: 12px;
-          padding-bottom: 28px;
+          --photo-h: max(66svh, 44vw);
+          --photo-shift-y: -4%;
+          min-height: max(100svh, calc(36vw + 400px));
         }
-        .hero-copy { order: -1; margin-top: 0; }
-        .arch { width: min(100%, 66svh, 500px); }
+        .hero-content { padding-bottom: 44px; }
+        .countdown-panel { padding: 72px 32px 64px; }
       }
 
       /* ============ MOTION ============ */
@@ -404,42 +397,33 @@
       .js .reveal.in { opacity: 1; transform: none; }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
-        .arch-photo img, .rise, .lightbox[open] { animation: none; }
+        .hero-img, .rise, .lightbox[open] { animation: none; }
         .js .reveal { opacity: 1; transform: none; transition: none; }
       }
     </style>
   </head>
   <body>
-    <div class="hero-screen">
-      <header class="site-header">
-        <a class="brand" href="#top" aria-label="Becky and Chris, home">
-          <i class="mono" aria-hidden="true"></i>
-          <span>Portland, Maine</span>
-        </a>
-      </header>
-
-      <section class="hero" id="top">
-        <div class="arch rise">
-          <div class="arch-photo">
-            <img
-              src="images/web/gallery/4Y3A7236-2000.jpg"
-              alt="Chris dipping Becky for a kiss on the dunes"
-              fetchpriority="high"
-            />
-          </div>
-        </div>
-        <div class="hero-copy">
-          <p class="eyebrow rise rise-2">✦ A celebration by land &amp; sea ✦</p>
-          <h1 class="rise rise-2">Becky <span class="amp">&amp;</span> Chris</h1>
-          <p class="date tabular rise rise-3">06 · 12 · 2027</p>
-          <p class="tagline rise rise-3">We'd love for you to come aboard.</p>
-        </div>
-      </section>
-    </div>
+    <header class="hero" id="top">
+      <div class="hero-photo">
+        <img
+          class="hero-img"
+          src="images/web/nose-to-nose-1200.jpg"
+          srcset="images/web/nose-to-nose-1200.jpg 1200w, images/web/nose-to-nose-2400.jpg 2400w"
+          sizes="max(105vw, 111svh)"
+          alt="Becky and Chris, nose to nose on a foggy beach"
+          fetchpriority="high"
+        />
+      </div>
+      <div class="hero-content">
+        <h1 class="rise">Becky <span class="script">&amp;</span> Chris</h1>
+        <p class="date tabular rise rise-2">06 · 12 · 2027</p>
+        <p class="eyebrow rise rise-3">✦ A celebration by land &amp; sea ✦</p>
+      </div>
+    </header>
 
     <main>
-      <section class="band block" aria-labelledby="count-title">
-        <div class="reveal">
+      <section class="countdown" aria-labelledby="count-title">
+        <div class="countdown-panel reveal">
           <p class="eyebrow">Until we tie the knot</p>
           <h2 id="count-title">Our adventure begins in…</h2>
           <div class="count tabular" role="timer" aria-live="off">
@@ -448,7 +432,7 @@
             <div><strong id="cdMins">—</strong><span>MIN</span></div>
             <div><strong id="cdSecs">—</strong><span>SEC</span></div>
           </div>
-          <p class="note">Good things are worth the voyage</p>
+          <p class="note script">Good things are worth the voyage</p>
         </div>
       </section>
 
@@ -456,7 +440,7 @@
         <div class="reveal">
           <div class="heading">
             <p class="eyebrow">Save the date</p>
-            <h2 id="details-title">Meet Us in Maine</h2>
+            <h2 id="details-title">Meet us in <span class="script">Maine</span></h2>
           </div>
           <dl class="details-card">
             <div><dt class="eyebrow">When</dt><dd>June 12, 2027<small>Saturday afternoon</small></dd></div>
