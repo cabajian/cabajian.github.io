@@ -154,7 +154,11 @@
         height: auto;
         translate: 0 var(--photo-shift-y);
         transform-origin: 53.7% 38.5%;
-        animation: settle 14s ease-out both;
+      }
+      /* The slow zoom makes phones stutter when scrolled mid-animation, so
+         it only runs on wider screens. */
+      @media (min-width: 900px) {
+        .hero-img { animation: settle 14s ease-out backwards; }
       }
       /* The fade runs a few px past the photo's bottom edge so no sliver of
          photo can show through at the seam. */
@@ -420,12 +424,6 @@
       @keyframes fade {
         from { opacity: 0; }
       }
-      @keyframes rise {
-        from { opacity: 0; transform: translateY(16px); }
-      }
-      .rise { animation: rise 1.2s var(--ease) both; }
-      .rise-2 { animation-delay: 0.15s; }
-      .rise-3 { animation-delay: 0.3s; }
       .js .reveal {
         opacity: 0;
         transform: translateY(20px);
@@ -434,7 +432,7 @@
       .js .reveal.in { opacity: 1; transform: none; }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
-        .hero-img, .rise, .lightbox[open] { animation: none; }
+        .hero-img, .lightbox[open] { animation: none; }
         .js .reveal { opacity: 1; transform: none; transition: none; }
       }
     </style>
@@ -456,9 +454,9 @@
         </div>
       </div>
       <div class="hero-content">
-        <h1 class="rise">Becky <span class="script">&amp;</span> Chris</h1>
-        <p class="date tabular rise rise-2">06 · 12 · 2027</p>
-        <p class="eyebrow rise rise-3">✦ A celebration by land &amp; sea ✦</p>
+        <h1>Becky <span class="script">&amp;</span> Chris</h1>
+        <p class="date tabular">06 · 12 · 2027</p>
+        <p class="eyebrow">✦ A celebration by land &amp; sea ✦</p>
       </div>
     </header>
 
