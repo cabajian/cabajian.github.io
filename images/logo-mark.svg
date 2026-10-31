@@ -1,14 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="190 120 400 350">
   <!-- The logo's sailboat as a simple mark, traced from logo.svg as strokes on
        the same coordinates: mast, mainsail with boom, jib, and a hull made
-       from the wake line (deck), the check-mark stroke (bow) and the bottom
-       left of the C (stern). The favicon is built from this. -->
+       from the wake line (deck), the check-mark stroke (bow) curving round
+       into the keel, and the bottom left of the C (stern). The favicon is
+       built from this. -->
   <g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
     <path d="M372 145 L395 442" />
     <path d="M373 145 C440 168 522 250 516 345 L390 345" />
     <path d="M371 150 C368 240 347 326 303 381 C332 389 366 382 387 362" />
     <path d="M206 395 C211.7 395.8 226 398.7 240 400 C254 401.3 273.3 402.8 290 403 C306.7 403.2 323.3 402.2 340 401 C356.7 399.8 373.3 398.3 390 396 C406.7 393.7 423.3 390.5 440 387 C456.7 383.5 473.3 379.5 490 375 C506.7 370.5 526.8 364.8 540 360 C553.2 355.2 564.2 348.3 569 346" />
-    <path d="M569 346 L524 409" />
+    <path d="M569 346 L524 409 C503 438 382 467 278 454" />
     <path d="M206 395 C206.5 397.2 207.2 403.8 209 408 C210.8 412.2 212.7 414.7 217 420 C221.3 425.3 228.2 434.8 235 440 C241.8 445.2 250.8 448.7 258 451 C265.2 453.3 274.7 453.5 278 454" />
   </g>
 </svg>
