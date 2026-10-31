@@ -241,7 +241,8 @@
         color: var(--ink-soft);
         text-wrap: balance;
       }
-      .details .actions { margin-top: 22px; text-align: center; }
+      .details .cal-label { margin-top: 26px; text-align: center; }
+      .details .actions { margin-top: 12px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 
       /* ============ GALLERY ============ */
       /* Two portraits side by side over the wide shot on phones; one row,
@@ -486,8 +487,17 @@
             <div><dt class="eyebrow">Where</dt><dd>Old Port<small>Portland, Maine</small></dd></div>
           </dl>
           <p class="soon">The schedule, travel tips and RSVP will be here in 2027. Formal invitation to follow.</p>
+          <p class="eyebrow cal-label">Add to calendar</p>
           <p class="actions">
-            <a class="btn" href="assets/wedding.ics">Add to calendar</a>
+            <a class="btn" href="assets/wedding.ics">Apple / Outlook</a>
+            <a
+              class="btn"
+              href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Becky+%26+Chris%27+Wedding&dates=20270612T150000/20270612T210000&ctz=America/New_York&location=Old+Port,+Portland,+Maine"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Google Calendar
+            </a>
           </p>
         </div>
       </section>
